@@ -40,6 +40,7 @@
 </head>
 
 <body>
+    <!-- 상단 배너 및 nav START -->
     <div>
         <p class="text-center">모두모DU</p>
     </div>
@@ -47,23 +48,19 @@
     <nav>
         <ul>
             <li><a href="../index.html">Home</a></li>
-            <li><a href="#">Start</a></li>
-            <li><a href="#">Guide</a></li>
+            <li><a href="start_page.html">Start</a></li>
+            <li><a href="guide_page.html">Guide</a></li>
         </ul>
     </nav>
+    <!-- 상단 배너 및 nav END -->
 
     <div id="menu" class="mx-auto">
         <p class="text-center">인원 선택</p>
         <input type="number" value="2" class="mx-auto"><br/>
-        
+
         <button onclick="document.location='/page/min_cost_place.html'" class="mx-auto">최소 거리 위치 찾기</button>
         <button onclick="document.location='/page/fair_place.html'" class="mx-auto">공평한 위치 찾기</button>
     </div>
-
-    <div id="map" style="width:500px;height:400px;"></div>
-
-    <script src="./js/config.js" charset="utf-8"></script>
-    <script src="./js/map.js" charset="utf-8"></script>
 </body>
 
 </html>
