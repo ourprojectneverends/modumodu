@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,26 +31,33 @@
     <!-- 폰트 사용 -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="./css/default.css">
     <link rel="stylesheet" href="./css/index.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
+
 <body>
     <div>
-        <h1 id="title">모두모DU</h1>
-        <p>여기에 간단한 설명넣기 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos qui sequi, modi et mollitia at atque recusandae, alias necessitatibus perferendis nobis consectetur veritatis beatae fugiat consequuntur esse aperiam non facere!</p>
+        <p class="text-center">모두모DU</p>
     </div>
 
-    <div id="menu">
-        <p>인원 선택</p>
-        <input type="number" name="" id="">
-        <button onclick="document.location='/page/min_cost_place.html'">최소 거리 위치 찾기</button>
-        <button onclick="document.location='/page/fair_place.html'">공평한 위치 찾기</button>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="page/start_page.html">Start</a></li>
+            <li><a href="page/guide_page.html">Guide</a></li>
+        </ul>
+    </nav>
+
+    <div>
+        친구들과 약속 장소 정하기!<br />
+        장소 조율이 불편했다면?<br />
+
+        <button onClick="location.href='page/start_page.html'">모두모DU로 간편하게 약속잡기 ></button>
     </div>
-
-    <div id="map" style="width:500px;height:400px;"></div>
-
-    <script src="./js/config.js" charset="utf-8"></script>
-    <script src="./js/map.js" charset="utf-8"></script>
 </body>
+
 </html>

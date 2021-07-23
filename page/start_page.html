@@ -34,7 +34,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href=".././css/default.css">
-    <link rel="stylesheet" href=".././css/min_cost_page.css">
+    <link rel="stylesheet" href=".././css/start_page.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -52,10 +52,18 @@
         </ul>
     </nav>
 
+    <div id="menu" class="mx-auto">
+        <p class="text-center">인원 선택</p>
+        <input type="number" value="2" class="mx-auto"><br/>
+        
+        <button onclick="document.location='/page/min_cost_place.html'" class="mx-auto">최소 거리 위치 찾기</button>
+        <button onclick="document.location='/page/fair_place.html'" class="mx-auto">공평한 위치 찾기</button>
+    </div>
+
     <div id="map" style="width:500px;height:400px;"></div>
 
-    <script src="../js/config.js" charset="utf-8"></script>
-    <script src="../js/map.js" charset="utf-8"></script>
+    <script src="./js/config.js" charset="utf-8"></script>
+    <script src="./js/map.js" charset="utf-8"></script>
 </body>
 
 </html>

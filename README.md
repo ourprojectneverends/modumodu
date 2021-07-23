@@ -8,7 +8,7 @@
 <br/>
 
 * 참여자
-  [yarcha](), [realcrystal]()
+  [yarncha](https://github.com/yarncha), [realcrystal](https://github.com/realcrystal)
 
 * 기능 소개 (어떻게 이용하는지?)
   메인 페이지
