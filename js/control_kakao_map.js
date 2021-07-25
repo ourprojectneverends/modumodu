@@ -2,7 +2,7 @@ const API_KEY = config.KAKAO_MAP_API_KEY;
 
 let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 
-// gps 관련 변수들
+// gps로 현재 위치 받아오는 부분 START
 let cur_latitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
 let cur_longtitude = 126.570667;
 let options = {
@@ -22,6 +22,7 @@ function errorHandler(err) {
 }
 
 navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, options);
+// gps로 현재 위치 받아오는 부분 end
 
 $.getScript(`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${API_KEY}&autoload=false`, function () {
   kakao.maps.load(
