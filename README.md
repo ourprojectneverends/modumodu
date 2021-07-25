@@ -1,22 +1,24 @@
-# 모두모DU
+모두모DU
+===
 
-2021.06.29 ~
+> 2018년 교내 웹 대회인 Webolution의 아이디어로 제출하여 인기상을 수상했던 "약속 장소 정하기 웹" 구현 프로젝트
 
-2018년 교내 웹 대회인 Webolution의 아이디어로 제출한 "약속 장소 정하기 웹" 구현 프로젝트
-[개발 로그](progress.md)
+<!-- 좀더 구현하고 주석 해제할 예정 -->
+<!-- ## Table of Contents
+- [모두모DU](#모두모du)
+  - [Table of Contents](#table-of-contents)
+  - [What is 모두모DU?](#what-is-모두모du)
+  - [Features](#features)
 
-<br/>
+## What is 모두모DU?
+모두모DU는 여러 사람과 모일 때, 모임 장소를 정하기 힘들었던 요소를 해결하기 위한 웹입니다. 웹으로 구현되어 더욱 이용이 편리하고 설치나 가입이 필요 없습니다. 또한 카카오톡으로 간편하게 공유하여 장소를 입력받을 수도 있습니다.
 
-* 참여자
-  [yarncha](https://github.com/yarncha), [realcrystal](https://github.com/realcrystal)
+## Features
+* 기능 1
+* 기능 2
 
-* 기능 소개 (어떻게 이용하는지?)
-  메인 페이지
+웹 페이지 상단의 guide를 통해 자세한 사용 방법을 알 수 있습니다. -->
 
-  최소 거리 위치찾기
-  공평한 위치 찾기
+---
 
-* 사용 기술
-  Kakao Map API
-
-* 
+Made by [realcrystal](https://github.com/realcrystal), [yarncha](https://github.com/yarncha)
