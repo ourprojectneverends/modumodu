@@ -21,13 +21,13 @@
 
 ## TODO (FE)
 
-||index|start_page|guide_page|
+|PAGE|index|start_page|guide_page|
 |---|---|---|---|
-|추후 구현 예정|* 배너 만들어서 추가하기||* 구현 후 사용방법 추가하기|
+|WORK|* 배너 만들어서 추가하기||* 구현 후 사용방법 추가하기|
 
-||min_cost_place|fair_place|
+|PAGE|min_cost_place|fair_place|
 |---|---|---|
-|추후 구현 예정|||
+|WORK|||
 
 ## TODO (BE)
 
