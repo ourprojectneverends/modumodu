@@ -17,17 +17,23 @@
 - [x] 로직에 따라 페이지 다시 구성
 - [ ] 주소를 입력 받으면 DB로 저장하는 부분 구현
 
+### 2021.08.18
+- [ ] (이어서) DB 저장 구현
+- open_meeting.html
+  - [ ] 지도를 클릭하면 해당 위치를 선택할 수 있게
+  - [ ] 현재 선택된 위치(마커의 위치)의 주소를 아래에 텍스트로 나타내기
+
 ---------
 
 ## TODO (FE)
 
-|PAGE|index|start_page|guide_page|
-|---|---|---|---|
-|WORK|* 배너 만들어서 추가하기||* 구현 후 사용방법 추가하기|
-
-|PAGE|min_cost_place|fair_place|
+|PAGE|index|guide_page|
 |---|---|---|
-|WORK|||
+|WORK|* 배너 만들어서 추가하기|* 구현 후 사용방법 추가하기|
+
+|PAGE|open_meeting|join_meeting|meeting_info|
+|---|---|---|---|
+|WORK||||
 
 ## TODO (BE)
 
