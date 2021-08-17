@@ -34,7 +34,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href=".././css/default.css">
-    <link rel="stylesheet" href=".././css/min_cost_page.css">
+    <link rel="stylesheet" href=".././css/meeting.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -54,10 +54,28 @@
     </nav>
     <!-- 상단 배너 및 nav END -->
 
-    <div>
-        모두모DU 가이드
+    <div id="menu" class="mx-auto">
+        <p class="text-center">모임을 생성했습니다!</p>
 
-        사용 방법을 여기에 적기
+        <!-- 모임 참여자 -->
+        <label>모임 참여자 수</label>
+        <input type="text" value="1/2" class="mx-auto" disabled><br />
+        <img src="../resources/user.png" alt="people" width="50px">
+
+        <!-- 최종 모일 장소 -->
+        <p class="text-center">모일 장소</p>
+        <div id="map" style="width:500px;height:400px;"></div>
+        <p id="location-text" class="text-center">대전 문지동 300 효성해링턴</p>
+        <button class="mx-auto">공유하기(카카오톡 공유하기 넣을 예정)</button><br/>
+
+        <!-- 공유하기 -->
+        <p class="text-center">아래의 링크를 통해 모임을 공유할 수 있습니다</p>
+        <input type="text" value="http://localhost:8080/page/join_meeting.html" disabled><button>복사</button><br />
+
+        
+        <!-- scripts -->
+        <script src=".././js/config.js" charset="utf-8"></script>
+        <script src=".././js/control_kakao_map.js" charset="utf-8"></script>
     </div>
 </body>
 

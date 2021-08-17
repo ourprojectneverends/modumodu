@@ -34,7 +34,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href=".././css/default.css">
-    <link rel="stylesheet" href=".././css/start_page.css">
+    <link rel="stylesheet" href=".././css/meeting.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -48,18 +48,25 @@
     <nav>
         <ul>
             <li><a href="../index.html">Home</a></li>
-            <li><a href="start_page.html">Start</a></li>
+            <li><a href="open_meeting.html">Start</a></li>
             <li><a href="guide_page.html">Guide</a></li>
         </ul>
     </nav>
     <!-- 상단 배너 및 nav END -->
 
     <div id="menu" class="mx-auto">
-        <p class="text-center">인원 선택</p>
-        <input type="number" value="2" class="mx-auto"><br/>
+        <p class="text-center">내 위치 선택하기</p>
+        <div id="map" style="width:500px;height:400px;"></div>
 
-        <button onclick="document.location='/page/min_cost_place.html'" class="mx-auto">최소 거리 위치 찾기</button>
-        <button onclick="document.location='/page/fair_place.html'" class="mx-auto">공평한 위치 찾기</button>
+        <label for="people-limit">최대 인원 수</label>
+        <input type="number" value="2" id="people-limit" class="mx-auto"><br />
+
+        <!-- <button onclick="document.location='/page/min_cost_place.html'" class="mx-auto">새 모임 만들기</button> -->
+        <button class="mx-auto">새 모임 만들기</button>
+
+        <!-- scripts -->
+        <script src=".././js/config.js" charset="utf-8"></script>
+        <script src=".././js/control_kakao_map.js" charset="utf-8"></script>
     </div>
 </body>
 

@@ -5,10 +5,6 @@ let container = document.getElementById('map'); //지도를 담을 영역의 DOM
 // gps로 현재 위치 받아오는 부분 START
 let cur_latitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
 let cur_longtitude = 126.570667;
-let options = {
-  enableHighAccuracy: true,
-  timeout: 5000
-};
 
 function getLatLng(position) {
   // 위도와 경도 저장하기
@@ -20,6 +16,11 @@ function errorHandler(err) {
   // 에러 관리
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
+
+let options = {
+  enableHighAccuracy: true,
+  timeout: 5000
+};
 
 navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, options);
 // gps로 현재 위치 받아오는 부분 end
