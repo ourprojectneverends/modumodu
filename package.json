@@ -1,0 +1,24 @@
+{
+  "name": "modumodu",
+  "version": "1.0.0",
+  "description": "2021.06.29 ~",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ourprojectneverends/modumodu.git"
+  },
+  "author": "realcrystal, yarncha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ourprojectneverends/modumodu/issues"
+  },
+  "homepage": "https://github.com/ourprojectneverends/modumodu#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.13.7"
+  }
+}
