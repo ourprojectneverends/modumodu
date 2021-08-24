@@ -5,13 +5,13 @@ const userSchema = mongoose.Schema({
         type: String,
         maxlength: 10
     },
-    meet: {
-        type: Schema.Types.ObjectId, ref: 'Meet'
-    },
+    // meet: {
+    //     type: Schema.Types.ObjectId, ref: 'Meet'
+    // },
     latitude: {
         type: Number
     },
-    logitude: {
+    longitude: {
         type: Number
     }
 });
