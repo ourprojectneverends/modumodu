@@ -39,7 +39,7 @@
 
 |PAGE|index|guide_page|
 |---|---|---|
-|WORK|* 배너 만들어서 추가하기|* 구현 후 사용방법 추가하기|
+|WORK|* title-area 인삿말? 수정 * detail-area부분에 모두모두 앱의 특징 추가하기|* 구현 후 사용방법 추가하기|
 
 |PAGE|open_meeting|join_meeting|meeting_info|
 |---|---|---|---|
