@@ -21,6 +21,7 @@
 /* nav */
 .nav-bar{
   font-weight: bold;
+  border-bottom: 3px solid black;
 }
 
 /* title-area */
@@ -49,14 +50,14 @@
 
 .title-p button {
   font-size: 16px;
-  border:2px solid rgb(124, 50, 0);
+  border:2px solid rgb(255, 123, 0);
   background-color:transparent;
   padding: 6px;
   border-radius: 6px;
 }
 
 .title-p button:hover {
-  background-color:rgb(124, 50, 0);
+  background-color:rgb(255, 123, 0);
   color: whitesmoke;
 }
 
