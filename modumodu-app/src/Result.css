@@ -1,0 +1,32 @@
+/* for meeting_info page */
+
+/* result-map-area */
+#result-map {
+  width: 100%;
+  height: 350px;
+}
+
+/* member-area */
+.member-area {
+  margin-top: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.member {
+  display: inline-block;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.member img {
+  width: 50px;
+  height: 50px;
+}
+
+/* share-area */
+.share-area {
+  margin-top: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+}

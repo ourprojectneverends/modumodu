@@ -37,7 +37,12 @@
   margin-top: 25px;
 }
 
-#map {
+#host-map {
+  width: 100%;
+  height: 350px;
+}
+
+#client-map {
   width: 100%;
   height: 350px;
 }
