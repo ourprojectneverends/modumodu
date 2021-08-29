@@ -1,7 +1,3 @@
-* {
-  font-family: "GmarketSansLight";
-}
-
 @font-face {
   font-family: "GmarketSansMedium";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
@@ -18,8 +14,12 @@
   font-style: normal;
 }
 
+* {
+  font-family: "GmarketSansLight";
+}
+
 /* nav */
-.nav-bar{
+.nav-bar {
   font-weight: bold;
   border-bottom: 3px solid black;
 }
@@ -50,19 +50,14 @@
 
 .title-p button {
   font-size: 16px;
-  border:2px solid rgb(255, 123, 0);
-  background-color:transparent;
+  border: 2px solid rgb(190, 92, 0);
+  background-color: transparent;
   padding: 6px;
   border-radius: 6px;
 }
 
 .title-p button:hover {
-  background-color:rgb(255, 123, 0);
-  color: whitesmoke;
-}
-
-.title-p button: {
-  background-color:#3f8b3f;
+  background-color: rgb(190, 92, 0);
   color: whitesmoke;
 }
 
@@ -83,4 +78,7 @@
   font-size: 20px;
 }
 
-/* background-color: #669966; */
+/* footer */
+footer{
+  margin-top: 50px;
+}

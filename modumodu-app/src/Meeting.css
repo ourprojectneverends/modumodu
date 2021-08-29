@@ -1,0 +1,43 @@
+/* for open_meeting and join_meeting page */
+
+/* title */
+.page-title {
+  font-size: 45px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* content */
+/* .page-content {
+}
+
+.content-header {
+} */
+
+.input-area-1 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.input-area-1 :nth-child(1) {
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+.input-area-1 :nth-child(2) {
+  width: 100%;
+  margin-top: 3px;
+}
+
+.next-button {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
+}
+
+#map {
+  width: 100%;
+  height: 350px;
+}

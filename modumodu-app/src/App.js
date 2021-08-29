@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Accordion } from 'react-bootstrap';
 
+import { Location } from './Location.js';
 import './App.css';
+import './Meeting.css';
 
 function App() {
 
@@ -27,11 +29,51 @@ function App() {
 
       <Switch>
         <Route path="/open_meeting">
+          <p className="page-title">새 모임 만들기</p>
 
+          <div className="page-content">
+            <Accordion defaultActiveKey="0">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header className="content-header">모임 이름과 참여자 닉네임을 입력해 주세요</Accordion.Header>
+                <Accordion.Body>
+                  <div className="input-area-1">
+                    <p>모임 이름</p>
+                    <input type="text" defaultValue="모두 함께 놀아요"></input>
+                  </div>
+                  <div className="input-area-1">
+                    <p>닉네임</p>
+                    <input type="text" defaultValue="sims"></input>
+                  </div>
+                  <button className="next-button">다음</button>
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header className="content-header">출발할 위치를 선택해 주세요</Accordion.Header>
+                <Accordion.Body>
+                  <Location />
+                  <button className="next-button">다음</button>
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="2">
+                <Accordion.Header className="content-header">모임의 최대 인원 수를 선택해 주세요</Accordion.Header>
+                <Accordion.Body>
+                  <div className="input-area-3">
+                    <p>최대 <input type="number" defaultValue="2"></input>명까지</p>
+                    <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
+                  </div>
+                  <button className="next-button" onClick={ () => {window.location.href="/meeting_info"}}>새 모임 생성</button>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+
+          </div>
         </Route>
         <Route path="/join_meeting">
 
         </Route>
+        <Route path="/meeting_info">
+
+</Route>
         <Route path="/guide">
 
         </Route>
@@ -42,7 +84,7 @@ function App() {
               <p>우리, 어디서 만날까?</p>
               <p>멀리 떨어진 친구들과의 모임, 각종 모임 등<br />
                 모임 장소 조율이 불편했다면?</p>
-              <button>모두모두로 간편하게 약속잡기</button>
+              <button onClick={ () => {window.location.href="/open_meeting"}}>모두모두로 간편하게 약속잡기</button>
             </div>
           </div>
 
@@ -59,9 +101,6 @@ function App() {
           </div>
         </Route>
       </Switch>
-
-
-
 
       <footer>
         <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
