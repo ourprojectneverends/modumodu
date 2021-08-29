@@ -43,7 +43,7 @@
 
 |PAGE|open_meeting|join_meeting|meeting_info|
 |---|---|---|---|
-|WORK||||
+|WORK|내위치 설정 오류 수정/위치 설정 UI수정/값을 입력하지 않고 넘어갔을 경우 알림 주기/모임 인원수 제한|||
 
 ## TODO (BE)
 
