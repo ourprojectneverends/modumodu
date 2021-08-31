@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Navbar, Container, Nav, NavDropdown, Accordion } from 'react-bootstrap';
 
-import { HostMap } from './HostMap.js';
-import { ClientMap } from './ClientMap.js';
+import { HostMap } from './components/HostMap.js';
+import { ClientMap } from './components/ClientMap.js';
 import { ResultMap } from './ResultMap.js';
-import { MeetingData } from './meeting_sample_data.js';
 import './App.css';
 import './Meeting.css';
 import './Result.css';
+import { MeetingData } from './data/meeting_sample_data2.js';
+import { MemberData } from './data/meeting_sample_data.js';
 
 function App() {
   // state
