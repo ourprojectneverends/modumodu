@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Navbar, Container, Nav, NavDropdown, Accordion } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
 import { HostMap } from './components/HostMap.js';
 import { ClientMap } from './components/ClientMap.js';
@@ -14,8 +14,9 @@ import { MemberData } from './data/meeting_sample_data.js';
 function App() {
   // state
   let [meetingData, setMeetingData] = useState(MeetingData);
+  let [memberData, setMemberData] = useState(MemberData);
   let [certified, setCertified] = useState(false);
-  let [step, setStep] = useState(0);
+  let [userInputScreen, setUserInputScreen] = useState(0);
 
   return (
     <div className="App">
@@ -39,78 +40,102 @@ function App() {
         <Route path="/open_meeting">
           <p className="page-title">새 모임 만들기</p>
           <div className="page-content">
-            <Accordion defaultActiveKey="0">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header className="content-header">모임 이름과 참여자 닉네임을 입력해 주세요</Accordion.Header>
-                <Accordion.Body>
-                  <div className="input-area-1">
-                    <p>모임 이름</p>
-                    <input type="text" defaultValue="모두 함께 놀아요"></input>
-                  </div>
-                  <div className="input-area-1">
-                    <p>닉네임</p>
-                    <input type="text" defaultValue="sims"></input>
-                  </div>
-                  <button className="next-button">다음</button>
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="1">
-                <Accordion.Header className="content-header">출발할 위치를 선택해 주세요</Accordion.Header>
-                <Accordion.Body>
-                  <HostMap />
-                  <button className="next-button">다음</button>
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="2">
-                <Accordion.Header className="content-header">모임의 최대 인원 수를 선택해 주세요</Accordion.Header>
-                <Accordion.Body>
-                  <div className="input-area-3">
-                    <p>최대 <input type="number" defaultValue="2"></input>명까지</p>
-                    <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
-                  </div>
-                  <button className="next-button" onClick={() => { window.location.href = "/meeting_info" }}>새 모임 생성</button>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+            <div className="user-input-area">
+              <div className="user-input-title">모임 이름과 참여자 닉네임을 입력해 주세요</div>
+              {
+                userInputScreen === 0
+                  ? (
+                    <div className="user-input-content">
+                      <div>
+                        <p>모임 이름</p>
+                        <input type="text" defaultValue="모두 함께 놀아요"></input>
+                      </div>
+                      <div>
+                        <p>닉네임</p>
+                        <input type="text" defaultValue="sims"></input>
+                      </div>
+                      <button className="next-button" onClick={() => { setUserInputScreen(1) }}>다음</button>
+                    </div>
+                  ) : null
+              }
+            </div>
+            <div className="user-input-area">
+              <div className="user-input-title">출발할 위치를 선택해 주세요</div>
+              {
+                userInputScreen === 1
+                  ? (
+                    <div className="user-input-content">
+                      <HostMap />
+                      <button className="prev-button" onClick={() => { setUserInputScreen(0) }}>이전</button>
+                      <button className="next-button" onClick={() => { setUserInputScreen(2) }}>다음</button>
+                    </div>
+                  ) : null
+              }
+            </div>
+            <div className="user-input-area">
+              <div className="user-input-title">모임의 최대 인원 수를 선택해 주세요</div>
+              {
+                userInputScreen === 2
+                  ? (
+                    <div className="user-input-content">
+                      <div className="input-area-3">
+                        <p>최대 <input type="number" defaultValue="2"></input>명까지</p>
+                        <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
+                      </div>
+                      <button className="prev-button" onClick={() => { setUserInputScreen(1) }}>이전</button>
+                      <button className="submit-button" onClick={() => { window.location.href = "/meeting_info" }}>새 모임 생성</button>
+                    </div>
+                  ) : null
+              }
+            </div>
           </div>
         </Route>
 
         <Route path="/join_meeting">
           <p className="page-title">모임 참여하기</p>
-
           {
             certified === false
               ? (
                 <div className="page-door">
-                  <p>모임에 참여하려면 비밀번호가 필요합니다</p>
+                  <p>모임에 참여하기 위해서는 비밀번호가 필요합니다</p>
                   <input type="text"></input><br />
                   <button onClick={() => {
                     setCertified(true);
                   }}>참여하기</button>
                 </div>
               )
-              : <div className="page-content">
-                <p>모두 함께 놀아요 모임</p>
-                <p>현재 참여자 수 2/4</p>
-                <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header className="content-header">참여자 닉네임을 입력해 주세요</Accordion.Header>
-                    <Accordion.Body>
-                      <div className="input-area-1">
-                        <p>닉네임</p>
-                        <input type="text" defaultValue="sims"></input>
-                      </div>
-                      <button className="next-button">다음</button>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                  <Accordion.Item eventKey="1">
-                    <Accordion.Header className="content-header">출발할 위치를 선택해 주세요</Accordion.Header>
-                    <Accordion.Body>
-                      <ClientMap />
-                      <button className="next-button" onClick={() => { window.location.href = "/meeting_info" }}>모임 참여하기</button>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
+              :
+              <div className="page-content">
+                <p>{meetingData[0].name}</p>
+                <p>현재 참여자 수 {meetingData[0].memberNum}/{meetingData[0].memberLimit}</p>
+                <div className="user-input-area">
+                  <div className="user-input-title">참여자 닉네임을 입력해 주세요</div>
+                  {
+                    userInputScreen === 0
+                      ? (
+                        <div className="user-input-content">
+                          <div>
+                            <p>닉네임</p>
+                            <input type="text" defaultValue="sims"></input>
+                          </div>
+                          <button className="next-button" onClick={() => { setUserInputScreen(1) }}>다음</button>
+                        </div>
+                      ) : null
+                  }
+                </div>
+                <div className="user-input-area">
+                  <div className="user-input-title">출발할 위치를 선택해 주세요</div>
+                  {
+                    userInputScreen === 1
+                      ? (
+                        <div className="user-input-content">
+                          <ClientMap />
+                          <button className="prev-button" onClick={() => { setUserInputScreen(0) }}>이전</button>
+                          <button className="submit-button" onClick={() => { window.location.href = "/meeting_info" }}>모임 참여하기</button>
+                        </div>
+                      ) : null
+                  }
+                </div>
               </div>
           }
         </Route>
@@ -118,15 +143,15 @@ function App() {
         <Route path="/meeting_info">
           <p className="page-title">우리 여기서 모이면 돼!</p>
           <div className="page-content">
-            <ResultMap meetingData={meetingData} />
+            <ResultMap memberData={memberData} />
             <div className="member-area">
               <p>모임 참여자</p>
               <div>
                 {
-                  meetingData.map(function (memberInfo) {
+                  memberData.map(function (memberInfo) {
                     return (
                       <div className="member">
-                        <img src="./img/logo.png"></img>
+                        <img src="./img/logo.png" alt="member"></img>
                         <p>{memberInfo.name}</p>
                       </div>
                     )
@@ -176,6 +201,11 @@ function App() {
             <div className="detail-element">
               <p>◾ 특징 2 ◾</p>
               <p>특징 설명들</p>
+            </div>
+            <div className="detail-element">
+              <p>◾ 특징 3 ◾</p>
+              <p>특징 설명들</p>
+              <button onClick={() => { window.location.href = "/open_meeting" }}>지금 바로 해보기!</button>
             </div>
           </div>
         </Route>

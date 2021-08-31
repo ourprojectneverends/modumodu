@@ -1,5 +1,4 @@
 /* for open_meeting and join_meeting page */
-
 /* title */
 .page-title {
   font-size: 45px;
@@ -9,25 +8,33 @@
 }
 
 /* content */
-/* .page-content {
-}
-
-.content-header {
-} */
-
-.input-area-1 {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.input-area-1 :nth-child(1) {
+.user-input-area > div{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
   width: 100%;
-  margin-bottom: 3px;
 }
 
-.input-area-1 :nth-child(2) {
-  width: 100%;
-  margin-top: 3px;
+.user-input-title{
+  border-top:1px solid rgba(49, 28, 28, 0.3);
+  border-bottom:1px solid rgba(128, 128, 128, 0.3);
+  font-weight: bold;
+}
+
+.opened{
+  color:rgb(16, 76, 78);
+  background-color: rgba(95, 158, 160, 0.3);
+}
+
+.user-input-content >div> input{
+  margin-bottom: 30px;
+}
+
+.prev-button {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
 }
 
 .next-button {
@@ -37,6 +44,16 @@
   margin-top: 25px;
 }
 
+.submit-button {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
+  display: block;
+  margin: auto;
+}
+
+
 #host-map {
   width: 100%;
   height: 350px;
@@ -45,4 +62,22 @@
 #client-map {
   width: 100%;
   height: 350px;
+}
+
+/* page-door */
+.page-door > *{
+  text-align: center;
+  display: block;
+  margin:auto;
+}
+
+.page-door p{
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.page-door button{
+  background-color: blanchedalmond;
+  border:2px solid black;
+  border-radius: 6px;
 }

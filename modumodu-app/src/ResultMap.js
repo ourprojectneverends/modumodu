@@ -28,14 +28,14 @@ function ResultMap(props) {
         let message = '모임 장소 위도 : ' + resultLatitude + ', 경도 : ' + resultLongtitude;
         curLocationP.innerHTML = message;
 
-        for (var i = 0; i < props.meetingData.length; i++) {
+        for (var i = 0; i < props.memberData.length; i++) {
             let imageSize = new kakao.maps.Size(35, 35);
             let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-            var marker = new kakao.maps.Marker({
+            let marker = new kakao.maps.Marker({
                 map: map,
-                position: new kakao.maps.LatLng(props.meetingData[i].lat, props.meetingData[i].lng),
-                title: props.meetingData[i].name,
+                position: new kakao.maps.LatLng(props.memberData[i].lat, props.memberData[i].lng),
+                title: props.memberData[i].name,
                 image: markerImage
             });
         }
