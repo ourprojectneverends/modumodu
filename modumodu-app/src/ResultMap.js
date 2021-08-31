@@ -1,7 +1,7 @@
 /* global kakao */
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
-function ResultMap() {
+function ResultMap(props) {
 
     useEffect(() => {
         let curLocationP = document.getElementById('result-location');
@@ -16,21 +16,6 @@ function ResultMap() {
             level: 3 //지도의 레벨(확대, 축소 정도)
         };
 
-        let memberPositions = [
-            {
-                title: '고영이',
-                latlng: new kakao.maps.LatLng(33.450705, 126.570677)
-            },
-            {
-                title: '갱얼쥐',
-                latlng: new kakao.maps.LatLng(33.450936, 126.569477)
-            },
-            {
-                title: '햄서터',
-                latlng: new kakao.maps.LatLng(33.450879, 126.569940)
-            }
-        ];
-
         let imageSrc = "./img/logo.png";
 
         // 중심 좌표에 마커 만들기
@@ -43,15 +28,15 @@ function ResultMap() {
         let message = '모임 장소 위도 : ' + resultLatitude + ', 경도 : ' + resultLongtitude;
         curLocationP.innerHTML = message;
 
-        for (var i = 0; i < memberPositions.length; i++) {
+        for (var i = 0; i < props.meetingData.length; i++) {
             let imageSize = new kakao.maps.Size(35, 35);
             let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             var marker = new kakao.maps.Marker({
-                map: map, // 마커를 표시할 지도
-                position: memberPositions[i].latlng, // 마커를 표시할 위치
-                title: memberPositions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                image: markerImage // 마커 이미지 
+                map: map,
+                position: new kakao.maps.LatLng(props.meetingData[i].lat, props.meetingData[i].lng),
+                title: props.meetingData[i].name,
+                image: markerImage
             });
         }
 

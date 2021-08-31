@@ -5,12 +5,14 @@ import { Navbar, Container, Nav, NavDropdown, Accordion } from 'react-bootstrap'
 import { HostMap } from './HostMap.js';
 import { ClientMap } from './ClientMap.js';
 import { ResultMap } from './ResultMap.js';
+import { MeetingData } from './meeting_sample_data.js';
 import './App.css';
 import './Meeting.css';
 import './Result.css';
 
 function App() {
   // state
+  let [meetingData, setMeetingData] = useState(MeetingData);
   let [certified, setCertified] = useState(false);
   let [step, setStep] = useState(0);
 
@@ -113,9 +115,46 @@ function App() {
         </Route>
 
         <Route path="/meeting_info">
+          <p className="page-title">우리 여기서 모이면 돼!</p>
+          <div className="page-content">
+            <ResultMap meetingData={meetingData} />
+            <div className="member-area">
+              <p>모임 참여자</p>
+              <div>
+                {
+                  meetingData.map(function (memberInfo) {
+                    return (
+                      <div className="member">
+                        <img src="./img/logo.png"></img>
+                        <p>{memberInfo.name}</p>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
+            <div className="share-area">
+              <p>공유 링크</p>
+              <input type="text"></input>
+              <button>복사</button><br />
+              <button>카카오톡 공유하기</button>
+            </div>
+          </div>
+        </Route>
 
         <Route path="/guide">
-
+          <p className="page-title">모두모두 사용 방법</p>
+          <div className="page-content">
+            <div>
+              초대 혹은 새 모임 만들기로 모임 생성
+            </div>
+            <div>
+              위치 선택, 기타 정보 입력
+            </div>
+            <div>
+              결과 확인
+            </div>
+          </div>
         </Route>
 
         <Route path="/">
@@ -131,7 +170,7 @@ function App() {
           <div className="detail-area">
             <div className="detail-element">
               <p>◾ 거리 계산 없이 간편하게! ◾</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas arcu leo, fringilla vel justo vel, ornare molestie sem. Fusce cursus turpis sed ex tincidunt, in scelerisque elit placerat. Sed quis pretium quam, id mollis tellus. Nullam convallis massa nisl, sed posuere justo egestas eget. Integer feugiat nunc et sollicitudin mattis.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas arcu leo, fringilla vel justo vel, ornare molestie sem.</p>
             </div>
             <div className="detail-element">
               <p>◾ 특징 2 ◾</p>
