@@ -4,9 +4,10 @@
   "description": "2021.06.29 ~",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/index.js",
+    "backend": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,10 @@
   "homepage": "https://github.com/ourprojectneverends/modumodu#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "concurrently": "^6.2.1",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.7"
   },
   "devDependencies": {
