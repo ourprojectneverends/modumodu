@@ -1,2 +1,2 @@
-# config.js 무시하도록 작성함
-js/config.js
+node_modules
+dev.js
