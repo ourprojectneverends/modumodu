@@ -18,10 +18,16 @@
   font-family: "GmarketSansLight";
 }
 
+html {
+  height: 100%;
+  font-size: 62.5%;
+}
+
 /* nav */
 .nav-bar {
   font-weight: bold;
-  border-bottom: 3px solid black;
+  font-size: 1.8rem;
+  border-bottom: 2px solid black;
 }
 
 /* title-area */
@@ -29,9 +35,12 @@
   position: relative;
 }
 
+.title-p > * {
+  font-family: "GmarketSansMedium";
+}
+
 .title-p {
   position: absolute;
-  font-family: "GmarketSansMedium";
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -40,50 +49,97 @@
 }
 
 .title-p p:nth-child(1) {
-  font-size: 50px;
+  font-size: 4rem;
   font-weight: bold;
 }
 
 .title-p p:nth-child(2) {
-  font-size: 35px;
+  font-size: 2.5rem;
 }
 
 .title-p button {
-  font-size: 16px;
-  border: 2px solid rgb(190, 92, 0);
+  border: 2.5px solid whitesmoke;
   background-color: transparent;
+  border-radius: 3px;
   padding: 6px;
-  border-radius: 6px;
+  font-size: 2.3rem;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .title-p button:hover {
-  background-color: rgb(190, 92, 0);
-  color: whitesmoke;
+  background: linear-gradient(-90deg, whitesmoke, transparent);
+  background-size: 400% 400%;
+  animation: gradient 2.5s ease-in-out infinite;
 }
 
 /* detail-element */
 .detail-element {
-  padding: 5px;
+  display: grid;
+  padding: 20px;
   margin-top: 40px;
-  margin: auto;
+  margin-bottom: 40px;
+  width: 100%;
+  height: 400px;
+  grid-template-rows: 3fr 3fr 1fr 5fr;
+  grid-template-areas:
+    "detail-element-num"
+    "detail-element-title"
+    "detail-element-content"
+    "detail-element-img";
+  row-gap: 10px;
+  justify-items: center;
 }
 
-.detail-element p:nth-child(1) {
+.detail-element > p {
+  height: 100%;
+  margin: 0;
   text-align: center;
-  font-size: 30px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.detail-element > :nth-child(1) {
+  grid-area: detail-element-num;
+  font-size: 5rem;
+  font-weight: bold;
+  color: grey;
+}
+
+.detail-element > :nth-child(2) {
+  grid-area: detail-element-title;
+  font-size: 3.8rem;
   font-weight: bold;
 }
 
-.detail-element p:nth-child(2) {
-  text-align: center;
-  font-size: 20px;
+.detail-element > :nth-child(3) {
+  grid-area: detail-element-content;
+  font-size: 2.3rem;
 }
 
-.detail-element button {
-  background-color: blanchedalmond;
+.detail-element > img {
+  grid-area: detail-element-img;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.detail-area > button {
+  background-color: #6a82fb3f;
   border: 2px solid black;
-  border-radius: 6px;
-  font-size: 20px;
+  border-radius: 3px;
+  font-size: 2.5rem;
+  font-weight: bold;
   display: block;
   margin: auto;
 }
@@ -92,3 +148,5 @@
 footer {
   margin-top: 50px;
 }
+
+/*FC5C7D 6A82FB*/

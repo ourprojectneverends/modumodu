@@ -37,7 +37,7 @@
 ### 2021.09.01
 - [ ] 리액트로 변환한 페이지 UI 수정 마무리
   - 나중에 할 것들은 TODO (FE)에 적기
-- [ ] develop으로 merge
+- [ ] develop-react를 develop으로 merge
 
 ---------
 

@@ -4,10 +4,11 @@ import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
 import { HostMap } from './components/HostMap.js';
 import { ClientMap } from './components/ClientMap.js';
-import { ResultMap } from './ResultMap.js';
+import { ResultMap } from './components/ResultMap.js';
 import './App.css';
 import './Meeting.css';
 import './Result.css';
+import './Guide.css';
 import { MeetingData } from './data/meeting_sample_data2.js';
 import { MemberData } from './data/meeting_sample_data.js';
 
@@ -24,6 +25,7 @@ function App() {
         <Container>
           <Navbar.Brand as={Link} to="/">
             <img alt="" src="img/logo.svg" width="30" height="30" className="d-inline-block align-top" />{' '}ModuModu
+            {/* 로고+로고이름 이미지로 변경하기 */}
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
@@ -41,7 +43,7 @@ function App() {
           <p className="page-title">새 모임 만들기</p>
           <div className="page-content">
             <div className="user-input-area">
-              <div className="user-input-title">모임 이름과 참여자 닉네임을 입력해 주세요</div>
+              <div className={userInputScreen === 0 ? "user-input-title opened" : "user-input-title"} onClick={() => { setUserInputScreen(0) }}>모임 이름과 참여자 닉네임을 입력해 주세요</div>
               {
                 userInputScreen === 0
                   ? (
@@ -60,7 +62,7 @@ function App() {
               }
             </div>
             <div className="user-input-area">
-              <div className="user-input-title">출발할 위치를 선택해 주세요</div>
+              <div className={userInputScreen === 1 ? "user-input-title opened" : "user-input-title"} onClick={() => { setUserInputScreen(1) }}>출발할 위치를 선택해 주세요</div>
               {
                 userInputScreen === 1
                   ? (
@@ -73,7 +75,7 @@ function App() {
               }
             </div>
             <div className="user-input-area">
-              <div className="user-input-title">모임의 최대 인원 수를 선택해 주세요</div>
+              <div className={userInputScreen === 2 ? "user-input-title opened" : "user-input-title"} onClick={() => { setUserInputScreen(2) }}>모임의 최대 인원 수를 선택해 주세요</div>
               {
                 userInputScreen === 2
                   ? (
@@ -109,7 +111,7 @@ function App() {
                 <p>{meetingData[0].name}</p>
                 <p>현재 참여자 수 {meetingData[0].memberNum}/{meetingData[0].memberLimit}</p>
                 <div className="user-input-area">
-                  <div className="user-input-title">참여자 닉네임을 입력해 주세요</div>
+                  <div className={userInputScreen === 0 ? "user-input-title opened" : "user-input-title"} onClick={() => { setUserInputScreen(0) }}>참여자 닉네임을 입력해 주세요</div>
                   {
                     userInputScreen === 0
                       ? (
@@ -124,7 +126,7 @@ function App() {
                   }
                 </div>
                 <div className="user-input-area">
-                  <div className="user-input-title">출발할 위치를 선택해 주세요</div>
+                  <div className={userInputScreen === 1 ? "user-input-title opened" : "user-input-title"} onClick={() => { setUserInputScreen(1) }}>출발할 위치를 선택해 주세요</div>
                   {
                     userInputScreen === 1
                       ? (
@@ -171,14 +173,22 @@ function App() {
         <Route path="/guide">
           <p className="page-title">모두모두 사용 방법</p>
           <div className="page-content">
-            <div>
-              초대 혹은 새 모임 만들기로 모임 생성
+            <div className="guide_step">
+              <p> 1. 페이지 접속</p>
+              <p>모두모두 홈에서 [모두모두로 간편하게 약속잡기] 버튼 또는 상단 네비게이션 바에서 [START]-[새 모임 만들기] 로 접속합니다.</p>
+              <img src="./img/map.png"></img>
             </div>
-            <div>
-              위치 선택, 기타 정보 입력
+            <div className="guide_step">
+              <p> 2. 정보 입력</p>
+              <p>모임 이름, 참여자 이름, 출발 위치, 최대 인원 수를 단계별로 입력합니다. 잘못 입력한 부분이 있다면 이전 버튼을 통해 수정할 수 있습니다.</p>
             </div>
-            <div>
-              결과 확인
+            <div className="guide_step">
+              <p> 3. 초대하기</p>
+              <p>새 모임이 개설되었습니다! 모임 결과 창에서 새 모임이 제대로 개설된 것을 확인할 수 있습니다. 하단의 참여 링크를 복사하거나 카카오톡 공유하기를 통해 이전 단계에서 정한 최대 인원까지 다른 사람을 모임에 초대할 수 있습니다.</p>
+            </div>
+            <div className="guide_step">
+              <p> 4. 모이기</p>
+              <p>다른 참여자가 생길 경우 결과 위치가 참여자에 따라 실시간으로 변경됩니다. 자! 이제 정해진 장소로 모임을 시작해 볼까요?</p>
             </div>
           </div>
         </Route>
@@ -188,25 +198,31 @@ function App() {
             <img src="img/map.png" alt="map" className="img-fluid" />
             <div className="title-p">
               <p>우리, 어디서 만날까?</p>
-              <p>멀리 떨어진 친구들과의 모임, 각종 모임 등<br />
+              <p>멀리 떨어진 친구들과의 모임, 여행 장소 고민, 각종 미팅 등<br />
                 모임 장소 조율이 불편했다면?</p>
               <button onClick={() => { window.location.href = "/open_meeting" }}>모두모두로 간편하게 약속잡기</button>
             </div>
           </div>
           <div className="detail-area">
             <div className="detail-element">
-              <p>◾ 거리 계산 없이 간편하게! ◾</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas arcu leo, fringilla vel justo vel, ornare molestie sem.</p>
+              <p>- 1️ -</p>
+              <p>거리 계산 없이 간편하게!</p>
+              <p>모임 주최자가 모든 사람의 위치를 수집할 필요 없이, 각자 입력하면 끝!</p>
+              <img src="./img/travel.png"></img>
             </div>
             <div className="detail-element">
-              <p>◾ 특징 2 ◾</p>
-              <p>특징 설명들</p>
+              <p>- 2 -</p>
+              <p>카카오톡으로 공유하기 기능</p>
+              <p>어디서 만날지 캡쳐해서 보낼 필요 없이 [카카오톡 공유] 하나로 메세지 전달 가능!</p>
+              <img src="./img/travel.png"></img>
             </div>
             <div className="detail-element">
-              <p>◾ 특징 3 ◾</p>
-              <p>특징 설명들</p>
-              <button onClick={() => { window.location.href = "/open_meeting" }}>지금 바로 해보기!</button>
+              <p>- 3 -</p>
+              <p>공평한 모임 장소</p>
+              <p>모임 참여자들의 위치를 고려한 모임 장소로 모두가 만족할 수 있는 모임 장소 설정!</p>
+              <img src="./img/travel.png"></img>
             </div>
+            <button onClick={() => { window.location.href = "/open_meeting" }}>지금 바로 시작하기!</button>
           </div>
         </Route>
       </Switch>
