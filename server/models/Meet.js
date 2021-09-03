@@ -7,7 +7,12 @@ const meetSchema = mongoose.Schema({
     meet_id_tmp: {
         type: String,
         maxlength: 10
-    }
+    },
+    users: [
+        {
+            type: mongoose.Schema.Types.ObjectId, ref:'User'
+        }
+    ]
 });
 
 /*
