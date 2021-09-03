@@ -24,24 +24,60 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/user/add_user', (req, res) => {
-  // 유저 하나의 정보를 client에서 가져오면
-  // 그 정보를 DB에 넣어줌
-  const user = new User(req.body);
-  //save()는 mongodb의 메서드
-  user.save((err, doc) => {
-    if(err) return res.json({
-      success: false,
-      err
-    });
-    else return res.status(200).json({
-      success: true
-    });
-  });
+  
+  //1. 해당 meet이 db에 있는지 체크
+  Meet.findById(req.body.meet_id)
+  .lean().exec(function (err, meet){
+    if(err) { // 없으면 false
+      return res.json({
+        loginSuccess: false,
+        message: "해당 meet 없음."
+      });
+    }else{
+      //2. 있으면 add user 작업
+      //2-1. user 저장
+      const user = new User(req.body.user);
+      //save()는 mongodb의 메서드
+      user.save((err, savedUser) => {
+        if(err) return res.json({ //user 저장 실패
+          success: false,
+          err
+        });
+        else { //user 저장 성공
+          //2-2. meet 테이블의 users에 user id push
+          Meet.findByIdAndUpdate(req.body.meet_id, {
+            $push: { users: savedUser._id }
+          }, function(err, old){
+            if (err) return res.status(400).json({
+              success: false,
+              err
+            });
+            else {
+              return res.status(200).json({
+                success: true
+              });
+            }
+          });
+        }
+      });   
 
+    }
+  });
 });
 
 app.post('/api/meet/add_meet', (req, res) => {
   // client에서 새로운 meet이 생성되면 db에 저장
+  /*
+  meet_id_tmp: {
+      type: String,
+      maxlength: 10
+  },
+  users: [
+    {
+        type: mongoose.Schema.Types.ObjectId, ref:'User'
+    }
+  ]
+  */
   const meet = new Meet(req.body);
 
   //save()는 mongodb의 메서드
