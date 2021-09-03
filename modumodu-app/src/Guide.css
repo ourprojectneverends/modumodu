@@ -1,43 +1,47 @@
 /* for guide page */
-.guide_step {
-  /* border:3px solid black; */
-  margin-top: 20px;
-  margin-bottom: 20px;
+.guide-step {
+  margin-top: 40px;
+  margin-bottom: 40px;
   background-color: rgba(100, 148, 237, 0.3);
   padding: 20px;
   display: grid;
-}
-
-.guide_step > p:nth-child(1) {
-  font-weight: bold;
-}
-
-.guide_step:nth-child(1) {
-  grid-template-rows: 1fr 3fr 6fr 2fr 1fr;
+  height: 400px;
+  grid-template-rows: 2fr 5fr 2fr;
   grid-template-areas:
-    "."
-    "title"
-    "img"
-    "content"
-    ".";
+    "guide-step-title"
+    "guide-step-img"
+    "guide-step-content";
   row-gap: 10px;
-  align-content:stretch;
+  align-content: stretch;
 }
 
-.guide_step:nth-child(1) > p:nth-child(1) {
-  grid-area: title;
-  margin-bottom: 0px;
-  align-content:center;
+.guide-step:nth-child(even){
+    background-color: rgba(0, 128, 128, 0.3);
 }
 
-.guide_step:nth-child(1) > p:nth-child(2) {
-  grid-area: content;
-  margin-bottom: 0px;
-
+.guide-step > p {
+  height: 100%;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
 }
 
-.guide_step:nth-child(1) > img {
-  grid-area: img;
-  width: 100%;
-  height: 100px;
+.guide-step > p:nth-child(1) {
+  font-weight: bold;
+  font-size: 2.3rem;
+}
+
+.guide-step > p:nth-child(1) {
+  grid-area: guide-step-title;
+}
+
+.guide-step > p:nth-child(2) {
+  grid-area: guide-step-content;
+}
+
+.guide-step > img {
+  grid-area: guide-step-img;
+  height: 100%;
+  display: block;
+  overflow: hidden;
 }
