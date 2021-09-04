@@ -51,6 +51,10 @@
 - [x] user와 meet테이블 연결: meet에 users라는 배열을 만들어 user Id를 저장하도록 함
 - [x] 새로운 user를 추가할 때 meet의 users에 push 수행하도록 구현
 
+### 2021.09.04
+- [x] 각자 구현한 파트 합치는 issue에 대한 회의 진행
+- [ ] FE 부분 미리 만들어둔 BE 부분에 녹이기
+
 ---------
 
 ## TODO (FE)
