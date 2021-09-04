@@ -1,21 +1,23 @@
-// import './App.css';
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Switch, Route, Link } from "react-router-dom";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 
-import { HostMap } from "./components/HostMap.js";
-import { ClientMap } from "./components/ClientMap.js";
-import { ResultMap } from "./components/ResultMap.js";
+// css
 import "./App.css";
-import "./Meeting.css";
-import "./Result.css";
-import "./Guide.css";
+import "./components/views/PageCommon.css";
+import "./components/views/Meeting.css";
+
+// components
+import { HomePage } from "./components/views/HomePage.js";
+import { MeetingInfoPage } from "./components/views/MeetingInfoPage.js";
+import { GuidePage } from "./components/views/GuidePage.js";
+import { HostMap } from "./components/views/HostMap.js";
+import { ClientMap } from "./components/views/ClientMap.js";
+import LoginPage from "./components/views/LoginPage/LoginPage";
+
+// data
 import { MeetingData } from "./data/meeting_sample_data2.js";
 import { MemberData } from "./data/meeting_sample_data.js";
-
-import LandingPage from './components/views/LandingPage/LandingPage';
-import RegisterPage from './components/views/RegisterPage/RegisterPage';
-import LoginPage from './components/views/LoginPage/LoginPage';
 
 function App() {
   // state
@@ -87,9 +89,7 @@ function App() {
       </Navbar>
 
       <Switch>
-        <Route exact path='/' component={LandingPage} />
-        <Route exact path='/register' component={RegisterPage} />
-        <Route exact path='/login' component={LoginPage} />
+        <Route exact path="/login" component={LoginPage} />
 
         <Route path="/open_meeting">
           <p className="page-title">새 모임 만들기</p>
@@ -301,131 +301,15 @@ function App() {
         </Route>
 
         <Route path="/meeting_info">
-          <p className="page-title">우리 여기서 모이면 돼!</p>
-          <div className="page-content">
-            <div className="meeting-info-map">
-              <p>{meetingName} 최종 모임 장소</p>
-              <ResultMap memberData={memberData} />
-            </div>
-            <div className="meeting-info-member-area">
-              <p>현재 모임 참여자</p>
-              <div>
-                {memberData.map(function (memberInfo) {
-                  return (
-                    <div className="member">
-                      <img src="./img/logo.png" alt="member"></img>
-                      <p>{memberInfo.name}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="meeting-info-share-area">
-              <p>초대하기</p>
-              <div>
-                <input type="text" value="http://localhost:3000/join_meeting" disabled />
-                <button>복사</button>
-              </div>
-              <button>카카오톡 공유하기</button>
-            </div>
-          </div>
+          <MeetingInfoPage memberData={memberData} meetingData={meetingData} />
         </Route>
 
         <Route path="/guide">
-          <p className="page-title">모두모두 사용 방법</p>
-          <div className="page-content">
-            <div className="guide-step">
-              <p>1. 페이지 접속</p>
-              <p>
-                모두모두 홈에서 [모두모두로 간편하게 약속잡기] 버튼 또는 상단
-                네비게이션 바에서 [START]-[새 모임 만들기] 로 접속합니다.
-              </p>
-              <img src="./img/map.png"></img>
-            </div>
-            <div className="guide-step">
-              <p>2. 정보 입력</p>
-              <p>
-                모임 이름, 참여자 이름, 출발 위치, 최대 인원 수를 단계별로
-                입력합니다. 잘못 입력한 부분이 있다면 이전 버튼을 통해 수정할 수
-                있습니다.
-              </p>
-              <img src="./img/map.png"></img>
-            </div>
-            <div className="guide-step">
-              <p>3. 초대하기</p>
-              <p>
-                새 모임이 개설되었습니다! 모임 결과 창에서 새 모임이 제대로
-                개설된 것을 확인할 수 있습니다. 하단의 참여 링크를 복사하거나
-                카카오톡 공유하기를 통해 이전 단계에서 정한 최대 인원까지 다른
-                사람을 모임에 초대할 수 있습니다.
-              </p>
-              <img src="./img/map.png"></img>
-            </div>
-            <div className="guide-step">
-              <p>4. 모이기</p>
-              <p>
-                다른 참여자가 생길 경우 결과 위치가 참여자에 따라 실시간으로
-                변경됩니다. 자! 이제 정해진 장소로 모임을 시작해 볼까요?
-              </p>
-              <img src="./img/map.png"></img>
-            </div>
-          </div>
+          <GuidePage />
         </Route>
 
-        <Route path="/home">
-          <div className="title-area">
-            <img src="img/map.png" alt="map" className="img-fluid" />
-            <div className="title-p">
-              <p>우리, 어디서 만날까?</p>
-              <p>
-                멀리 떨어진 친구들과의 모임, 여행 장소 고민, 각종 미팅 등<br />
-                모임 장소 조율이 불편했다면?
-              </p>
-              <button
-                onClick={() => {
-                  window.location.href = "/open_meeting";
-                }}
-              >
-                모두모두로 간편하게 약속잡기
-              </button>
-            </div>
-          </div>
-          <div className="detail-area">
-            <div className="detail-element">
-              <p>- 1️ -</p>
-              <p>거리 계산 없이 간편하게!</p>
-              <p>
-                모임 주최자가 모든 사람의 위치를 수집할 필요 없이, 각자 입력하면
-                끝!
-              </p>
-              <img src="./img/travel.png"></img>
-            </div>
-            <div className="detail-element">
-              <p>- 2 -</p>
-              <p>카카오톡으로 공유하기 기능</p>
-              <p>
-                어디서 만날지 캡쳐해서 보낼 필요 없이 [카카오톡 공유] 하나로
-                메세지 전달 가능!
-              </p>
-              <img src="./img/travel.png"></img>
-            </div>
-            <div className="detail-element">
-              <p>- 3 -</p>
-              <p>공평한 모임 장소</p>
-              <p>
-                모임 참여자들의 위치를 고려한 모임 장소로 모두가 만족할 수 있는
-                모임 장소 설정!
-              </p>
-              <img src="./img/travel.png"></img>
-            </div>
-            <button
-              onClick={() => {
-                window.location.href = "/open_meeting";
-              }}
-            >
-              지금 바로 시작하기!
-            </button>
-          </div>
+        <Route path="/">
+          <HomePage />
         </Route>
       </Switch>
 
