@@ -294,9 +294,12 @@ function App() {
         <Route path="/meeting_info">
           <p className="page-title">우리 여기서 모이면 돼!</p>
           <div className="page-content">
-            <ResultMap memberData={memberData} />
-            <div className="member-area">
-              <p>모임 참여자</p>
+            <div className="meeting-info-map">
+              <p>{meetingName} 최종 모임 장소</p>
+              <ResultMap memberData={memberData} />
+            </div>
+            <div className="meeting-info-member-area">
+              <p>현재 모임 참여자</p>
               <div>
                 {memberData.map(function (memberInfo) {
                   return (
@@ -308,10 +311,12 @@ function App() {
                 })}
               </div>
             </div>
-            <div className="share-area">
-              <p>공유 링크</p>
-              <input type="text" />
-              <button>복사</button><br />
+            <div className="meeting-info-share-area">
+              <p>초대하기</p>
+              <div>
+                <input type="text" value="http://localhost:3000/join_meeting" disabled/>
+                <button>복사</button>
+              </div>
               <button>카카오톡 공유하기</button>
             </div>
           </div>

@@ -1,16 +1,67 @@
 /* for meeting_info page */
 
 /* result-map-area */
-#result-map {
+.meeting-info-map {
+  padding: 20px;
+  margin-top: 60px;
   width: 100%;
+}
+
+.meeting-info-map > p {
+  font-weight: bold;
+  text-align: center;
+  font-size: 2.3rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.meeting-info-map > * {
+  width: 100%;
+}
+
+#result-map {
   height: 350px;
 }
 
+.result-map-area > div:nth-child(2) {
+  margin-top: 5px;
+  border: 1px solid silver;
+  padding: 5px;
+  border-radius: 10px;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-map-area > div:nth-child(2) > * {
+  margin: 0;
+  height: 100%;
+}
+
+.result-map-area > div:nth-child(2) > button {
+  background-color: transparent;
+  font-weight: bold;
+  border: none;
+  border-left: 3px solid black;
+}
+
 /* member-area */
-.member-area {
-  margin-top: 50px;
-  margin-left: 10px;
-  margin-right: 10px;
+.meeting-info-member-area {
+  padding: 20px;
+  margin-top: 60px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.meeting-info-member-area > p {
+  font-weight: bold;
+  font-size: 2.3rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .member {
@@ -25,8 +76,34 @@
 }
 
 /* share-area */
-.share-area {
-  margin-top: 50px;
-  margin-left: 10px;
-  margin-right: 10px;
+.meeting-info-share-area {
+  padding: 20px;
+  margin-top: 60px;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.meeting-info-share-area > p {
+  font-weight: bold;
+  font-size: 2.3rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.meeting-info-share-area > * {
+  margin-top: 10px;
+}
+
+.meeting-info-share-area input {
+  margin-right: 5px;
+}
+
+.meeting-info-share-area button {
+  background-color: transparent;
+  border-radius: 3px;
+  border: 2px solid black;
 }

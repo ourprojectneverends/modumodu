@@ -15,8 +15,8 @@
   align-content: stretch;
 }
 
-.guide-step:nth-child(even){
-    background-color: rgba(0, 128, 128, 0.3);
+.guide-step:nth-child(even) {
+  background-color: rgba(0, 128, 128, 0.3);
 }
 
 .guide-step > p {

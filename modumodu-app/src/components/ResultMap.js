@@ -45,8 +45,11 @@ function ResultMap(props) {
 
     return (
         <div className="result-map-area">
-            <p id="result-location"></p>
             <div id="result-map"></div>
+            <div>
+                <p id="result-location"></p>
+                <button>공유</button>
+            </div>
         </div>
     )
 }

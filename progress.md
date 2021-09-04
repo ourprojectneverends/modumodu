@@ -32,12 +32,12 @@
   - [x] 새 모임 만들기 페이지
   - [x] 모임 참여하기 페이지
   - [x] 모임 결과화면 페이지
-  - [ ] Guide 페이지
+  - [x] Guide 페이지
 
 ### 2021.09.01
-- [ ] 리액트로 변환한 페이지 UI 수정 마무리
+- [x] 리액트로 변환한 페이지 UI 수정 마무리
   - 나중에 할 것들은 TODO (FE)에 적기
-- [ ] develop-react를 develop으로 merge
+- [x] develop-react를 develop으로 merge
 
 ---------
 
@@ -49,7 +49,7 @@
 
 |PAGE|open_meeting|join_meeting|meeting_info|
 |---|---|---|---|
-|WORK|현위치 설정안되는 오류 수정, 값을 입력하지 않고 넘어갔을 경우 알림 주기, 모임 인원수 제한&알림, 지도쪽 UI 개선, 위도경도가 아닌 지도정보값으로 위치 나타내기|open_meeting에서처럼 button display수정, 지도쪽 UI 개선|**UI 수정**|
+|WORK|현위치 설정안되는 오류 수정, 값을 입력하지 않고 넘어갔을 경우 알림 주기, 모임 인원수 제한&알림, 지도쪽 UI 개선, 위도경도가 아닌 지도정보값으로 위치 나타내기|open_meeting에서처럼 button display수정, 지도쪽 UI 개선|위도경도가 아닌 지도정보값으로 위치 나타내기, |
 
 ## TODO (BE)
 
