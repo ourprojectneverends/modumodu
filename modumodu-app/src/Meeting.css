@@ -1,0 +1,108 @@
+/* for open_meeting, join_meeting and meeting_info page */
+/* title */
+.page-title {
+  font-size: 4.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* page-door */
+.page-door {
+  font-size: 1.6rem;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.page-door > * {
+  display: block;
+  margin: auto;
+}
+
+.page-door p {
+  margin-bottom: 20px;
+}
+
+.page-door button {
+  font-weight: bold;
+  background-color: #6a82fb48;
+  border: 2px solid black;
+  border-radius: 3px;
+}
+
+/* content */
+.page-content {
+  font-size: 1.6rem;
+}
+
+.join-meeting-info {
+  padding: 20px;
+  width: 100%;
+  font-size: 2rem;
+}
+
+.user-input-area > div {
+  padding: 20px;
+  width: 100%;
+}
+
+.user-input-title {
+  border-top: 1px solid #4046638c;
+  border-bottom: 1px solid #4046638c;
+  font-weight: bold;
+}
+
+.opened {
+  color: #404663;
+  background-color: #6a82fb62;
+}
+
+.user-input-content > div > input {
+  margin-bottom: 30px;
+}
+
+.user-input-buttons {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.none {
+  visibility: hidden;
+}
+
+.prev-button {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
+}
+
+.next-button {
+  justify-content: flex-end;
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
+}
+
+.submit-button {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
+  /* display: block;
+  margin: auto; */
+}
+
+/* map */
+#host-map {
+  width: 100%;
+  height: 350px;
+}
+
+#client-map {
+  width: 100%;
+  height: 350px;
+}

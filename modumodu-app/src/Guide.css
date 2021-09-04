@@ -1,0 +1,47 @@
+/* for guide page */
+.guide-step {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  background-color: rgba(100, 148, 237, 0.3);
+  padding: 20px;
+  display: grid;
+  height: 400px;
+  grid-template-rows: 2fr 5fr 2fr;
+  grid-template-areas:
+    "guide-step-title"
+    "guide-step-img"
+    "guide-step-content";
+  row-gap: 10px;
+  align-content: stretch;
+}
+
+.guide-step:nth-child(even) {
+  background-color: rgba(0, 128, 128, 0.3);
+}
+
+.guide-step > p {
+  height: 100%;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.guide-step > p:nth-child(1) {
+  font-weight: bold;
+  font-size: 2.3rem;
+}
+
+.guide-step > p:nth-child(1) {
+  grid-area: guide-step-title;
+}
+
+.guide-step > p:nth-child(2) {
+  grid-area: guide-step-content;
+}
+
+.guide-step > img {
+  grid-area: guide-step-img;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
