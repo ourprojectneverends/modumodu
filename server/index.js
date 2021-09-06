@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/user/add_master', (req, res) => {
   /*
-  request body to be like 
+  request body sample
   {
     "meet":{"meet_name": "테스트1", "meet_pwd": "password", "limit": "6"},
     "user":{"name":"철수", "latitude":"33.450701", "longitude":"126.570667"}
@@ -63,7 +63,13 @@ app.post('/api/user/add_master', (req, res) => {
 });
 
 app.post('/api/user/add_user', (req, res) => {
-  
+  /*
+  request body sample
+  {
+    "meet_id": "61334ba85b7e700f18b305b3",
+    "user":{"name":"철수", "latitude":"33.450701", "longitude":"126.570667"}
+  }
+  */
   //1. 해당 meet이 db에 있는지 체크
   Meet.findById(req.body.meet_id)
   .lean().exec(function (err, meet){
@@ -99,7 +105,6 @@ app.post('/api/user/add_user', (req, res) => {
           });
         }
       });   
-
     }
   });
 });
@@ -131,8 +136,6 @@ app.post('/api/meet/add_meet', (req, res) => {
   });
 
 });
-
-
 
 app.post('/api/user/login', (req, res) => {
   // 요청된 id가 db에 있는지 확인
