@@ -1,12 +1,4 @@
 /* for open_meeting, join_meeting and meeting_info page */
-/* title */
-.page-title {
-  font-size: 4.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 40px;
-}
-
 /* page-door */
 .page-door {
   font-size: 1.6rem;
@@ -32,10 +24,6 @@
 }
 
 /* content */
-.page-content {
-  font-size: 1.6rem;
-}
-
 .join-meeting-info {
   padding: 20px;
   width: 100%;
@@ -59,7 +47,7 @@
 }
 
 .user-input-content > div > input {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .user-input-buttons {
@@ -68,32 +56,19 @@
   width: 100%;
 }
 
+.user-input-buttons > button {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: transparent;
+  margin-top: 25px;
+}
+
 .none {
   visibility: hidden;
 }
 
-.prev-button {
-  border-radius: 5px;
-  border: 2px solid black;
-  background-color: transparent;
-  margin-top: 25px;
-}
-
-.next-button {
-  justify-content: flex-end;
-  border-radius: 5px;
-  border: 2px solid black;
-  background-color: transparent;
-  margin-top: 25px;
-}
-
 .submit-button {
-  border-radius: 5px;
-  border: 2px solid black;
-  background-color: transparent;
-  margin-top: 25px;
-  /* display: block;
-  margin: auto; */
+  background-color: rgba(100, 148, 237, 0.25);
 }
 
 /* map */

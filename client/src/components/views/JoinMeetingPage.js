@@ -51,14 +51,14 @@ function JoinMeetingPage(props) {
                                     <input type="text" placeholder="sims" />
                                 </div>
                                 <div className="user-input-buttons">
-                                <button className="none">x</button>
-                                <button
-                                    className="next-button"
-                                    onClick={() => {
-                                        setUserInputScreen(1);
-                                    }}
-                                >다음</button>
-                            </div>
+                                    <button className="none">x</button>
+                                    <button
+                                        className="next-button"
+                                        onClick={() => {
+                                            setUserInputScreen(1);
+                                        }}
+                                    >다음</button>
+                                </div>
                             </div>
                         ) : null}
                     </div>
@@ -78,20 +78,20 @@ function JoinMeetingPage(props) {
                                 <ClientMap />
 
                                 <div className="user-input-buttons">
-                                <button
-                                    className="prev-button"
-                                    onClick={() => {
-                                        setUserInputScreen(0);
-                                    }}
-                                >이전</button>
-                                <button
-                                    className="submit-button"
-                                    onClick={() => {
-                                        window.location.href = "/meeting_info";
-                                    }}
-                                >모임 참여하기</button>
-                                <button className="none">x</button>
-                            </div>
+                                    <button
+                                        className="prev-button"
+                                        onClick={() => {
+                                            setUserInputScreen(0);
+                                        }}
+                                    >이전</button>
+                                    <button
+                                        className="submit-button"
+                                        onClick={() => {
+                                            window.location.href = "/meeting_info";
+                                        }}
+                                    >모임 참여하기</button>
+                                    <button className="none">x</button>
+                                </div>
                             </div>
                         ) : null}
                     </div>

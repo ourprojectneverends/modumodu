@@ -6,7 +6,7 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import "./App.css";
 import "./components/views/PageCommon.css";
 
-// components
+// page components
 import { HomePage } from "./components/views/HomePage.js";
 import { OpenMeetingPage } from "./components/views/OpenMeetingPage.js";
 import { JoinMeetingPage } from "./components/views/JoinMeetingPage.js";

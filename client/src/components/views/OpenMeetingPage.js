@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+
+// css
 import "./Meeting.css";
+
+// map component
 import { HostMap } from "./HostMap.js";
 
 function OpenMeetingPage(props) {
@@ -11,27 +15,27 @@ function OpenMeetingPage(props) {
         lat: "",
         lng: "",
         meetingLimit: "",
-      });
-    
-      const { meetingName, memberName, lat, lng, meetingLimit } = newMeetingInputs;
-    
-      const onChange = (e) => {
+    });
+
+    const { meetingName, memberName, lat, lng, meetingLimit } = newMeetingInputs;
+
+    const onChange = (e) => {
         const { value, newMeetingInputs } = e.target;
         setNewMeetingInputs({
-          ...newMeetingInputs,
-          [meetingName]: value,
+            ...newMeetingInputs,
+            [meetingName]: value,
         });
-      };
-    
-      const onReset = () => {
+    };
+
+    const onReset = () => {
         setNewMeetingInputs({
-          meetingName: "",
-          memberName: "",
-          lat: "",
-          lng: "",
-          meetingLimit: "",
+            meetingName: "",
+            memberName: "",
+            lat: "",
+            lng: "",
+            meetingLimit: "",
         });
-      };
+    };
 
     return (
         <div>

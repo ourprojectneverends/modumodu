@@ -1,2 +1,12 @@
+.page-title {
+  font-size: 4.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px;
+  width: 100%;
+}
 
-
+.page-content > * {
+  font-size: 1.6rem;
+  width:100%;
+}
