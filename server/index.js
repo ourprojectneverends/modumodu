@@ -23,6 +23,45 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.post('/api/user/add_master', (req, res) => {
+  /*
+  request body to be like 
+  {
+    "meet":{"meet_name": "테스트1", "meet_pwd": "password", "limit": "6"},
+    "user":{"name":"철수", "latitude":"33.450701", "longitude":"126.570667"}
+  }
+  */
+  
+  // 1. user 추가
+  const user = new User(req.body.user);
+  //save()는 mongodb의 메서드
+  user.save((err, savedUser) => {
+    if(err) return res.json({ //user 저장 실패
+      success: false,
+      message: "Add User",
+      err
+    });
+    else { //user 저장 성공
+      //meet 생성
+      let temp_meet = req.body.meet;
+      temp_meet.users = [savedUser.id];
+
+      const meet = new Meet(temp_meet);
+      meet.save((err, doc) => {
+        if(err) return res.json({
+          success: false,
+          message: "Add Meet",
+          err
+        });
+        else return res.status(200).json({
+          success: true,
+          doc
+        });
+      });
+    }
+  });
+});
+
 app.post('/api/user/add_user', (req, res) => {
   
   //1. 해당 meet이 db에 있는지 체크
