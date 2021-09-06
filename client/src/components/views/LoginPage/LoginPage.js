@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 function LoginPage() {
     const [UserId, setUserId] = useState("");
-    
+
     const onUserIdHandler = (event) => {
         setUserId(event.currentTarget.value)
     };
@@ -22,13 +22,13 @@ function LoginPage() {
 
     return (
         <div style={{
-            display:'flex', justifyContent:'center', alignItems:'center',
-            width:'100%', height:'100vh'
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            width: '100%', height: '100vh'
         }}>
             <form onSubmit={onSubmitHandler}>
                 <label>User ID: </label>
-                <input type="text" value={UserId} onChange={onUserIdHandler}/>
-                <br/>
+                <input type="text" value={UserId} onChange={onUserIdHandler} />
+                <br />
                 <button type="submit">Submit</button>
             </form>
         </div>

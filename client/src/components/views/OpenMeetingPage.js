@@ -52,7 +52,7 @@ function OpenMeetingPage(props) {
                             setUserInputScreen(0);
                         }}
                     >
-                        모임 이름과 참여자 닉네임을 입력해 주세요
+                        만들 모임 이름과 인원수를 선택해 주세요
                     </div>
                     {userInputScreen === 0 ? (
                         <div className="user-input-content">
@@ -66,16 +66,15 @@ function OpenMeetingPage(props) {
                                     value={meetingName}
                                 />
                             </div>
+
                             <div>
-                                <p>닉네임</p>
-                                <input
-                                    type="text"
-                                    name="memberName"
-                                    placeholder="닉네임"
-                                    onChange={onChange}
-                                    value={memberName}
-                                />
+                                <p>인원수</p>
+                                <p>
+                                    최대 <input type="number" defaultValue="2" />명까지
+                                </p>
+                                <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
                             </div>
+
                             <div className="user-input-buttons">
                                 <button className="none">x</button>
                                 <button
@@ -88,6 +87,7 @@ function OpenMeetingPage(props) {
                         </div>
                     ) : null}
                 </div>
+
                 <div className="user-input-area">
                     <div
                         className={
@@ -98,12 +98,19 @@ function OpenMeetingPage(props) {
                         onClick={() => {
                             setUserInputScreen(1);
                         }}
-                    >
-                        출발할 위치를 선택해 주세요
-                    </div>
+                    >참여자 닉네임을 입력해 주세요</div>
                     {userInputScreen === 1 ? (
                         <div className="user-input-content">
-                            <HostMap />
+                            <div>
+                                <p>닉네임</p>
+                                <input
+                                    type="text"
+                                    name="memberName"
+                                    placeholder="닉네임"
+                                    onChange={onChange}
+                                    value={memberName}
+                                />
+                            </div>
 
                             <div className="user-input-buttons">
                                 <button
@@ -132,17 +139,10 @@ function OpenMeetingPage(props) {
                         onClick={() => {
                             setUserInputScreen(2);
                         }}
-                    >
-                        모임의 최대 인원 수를 선택해 주세요
-                    </div>
+                    >출발할 위치를 선택해 주세요</div>
                     {userInputScreen === 2 ? (
                         <div className="user-input-content">
-                            <div className="input-area-3">
-                                <p>
-                                    최대 <input type="number" defaultValue="2" />명까지
-                                </p>
-                                <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
-                            </div>
+                            <HostMap />
 
                             <div className="user-input-buttons">
                                 <button
@@ -172,7 +172,7 @@ function OpenMeetingPage(props) {
                             setUserInputScreen(3);
                         }}
                     >
-                        모임 비밀번호를 설정해 주세요
+                        모임에 참여할 때 사용할 비밀번호를 설정해 주세요
                     </div>
                     {userInputScreen === 3 ? (
                         <div className="user-input-content">
@@ -200,9 +200,7 @@ function OpenMeetingPage(props) {
                         </div>
                     ) : null}
                 </div>
-
             </div>
-
         </div>
     );
 }
