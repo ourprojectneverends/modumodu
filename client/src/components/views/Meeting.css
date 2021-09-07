@@ -71,9 +71,11 @@
 #host-map {
   width: 100%;
   height: 350px;
+  border: 1px solid grey;
 }
 
 #client-map {
   width: 100%;
   height: 350px;
+  border: 1px solid grey;
 }

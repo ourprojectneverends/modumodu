@@ -63,6 +63,8 @@ function HostMap() {
     return (
         <div className="map-area">
             <div id="host-map"></div>
+            <input type="hidden" />
+            <input type="hidden" />
             <p id="host-location"></p>
         </div>
     )
