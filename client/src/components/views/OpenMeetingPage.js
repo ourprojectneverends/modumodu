@@ -68,8 +68,9 @@ function OpenMeetingPage(props) {
         axios.post('/api/user/add_master', body).then(response => {
             console.log(response.data);
             // console.log(body);
-            window.location.href = "/meeting_info";
         });
+
+        // window.location.href = "/meeting_info";
     };
 
     return (
@@ -105,7 +106,7 @@ function OpenMeetingPage(props) {
                             <div>
                                 <p>인원수</p>
                                 <p>
-                                    최대 <input type="number" id="limit-of-meeting" onChange={(e) => { onInputChange(e.target, inputData) }} />명까지
+                                    최대 <input type="number" min="2" max="6" id="limit-of-meeting" onChange={(e) => { onInputChange(e.target, inputData) }} />명까지
                                 </p>
                                 <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
                             </div>
