@@ -4,7 +4,7 @@ const meetSchema = mongoose.Schema({
     // meet: {
     //     type: Schema.Types.ObjectId, ref: 'Meet'
     // },
-    meet_id_tmp: {
+    meet_name: {
         type: String,
         maxlength: 10
     },
@@ -12,7 +12,13 @@ const meetSchema = mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId, ref:'User'
         }
-    ]
+    ],
+    meet_pwd: {
+        type: String
+    },
+    limit: {
+        type: Number
+    }
 });
 
 /*
