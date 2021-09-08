@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 // css
 import "./Meeting.css";
@@ -8,39 +9,75 @@ import { HostMap } from "./HostMap.js";
 
 function OpenMeetingPage(props) {
     let [userInputScreen, setUserInputScreen] = useState(0);
-
-    const [newMeetingInputs, setNewMeetingInputs] = useState({
+    let [inputData, setInputData] = useState({
         meetingName: "",
-        memberName: "",
-        lat: "",
-        lng: "",
-        meetingLimit: "",
+        meetingPwd: "",
+        limitOfMeeting: "",
+        userName: "",
+        userLat: "",
+        userLng: ""
     });
 
-    const { meetingName, memberName, lat, lng, meetingLimit } = newMeetingInputs;
+    // const onReset = () => {
+    //     setNewMeetingInputs({
+    //         meetingName: "",
+    //         memberName: "",
+    //         lat: "",
+    //         lng: "",
+    //         meetingLimit: "",
+    //     });
+    // };
 
-    const onChange = (e) => {
-        const { value, newMeetingInputs } = e.target;
-        setNewMeetingInputs({
-            ...newMeetingInputs,
-            [meetingName]: value,
-        });
-    };
+    function onInputChange(target, inputData) {
+        let newValue = target.value;
+        let newInputData = { ...inputData };
 
-    const onReset = () => {
-        setNewMeetingInputs({
-            meetingName: "",
-            memberName: "",
-            lat: "",
-            lng: "",
-            meetingLimit: "",
+        if (target.id === "meeting-name") {
+            newInputData.meetingName = newValue;
+        } else if (target.id === "limit-of-meeting") {
+            newInputData.limitOfMeeting = newValue;
+        } else if (target.id === "user-name") {
+            newInputData.userName = newValue;
+        } else if (target.id === "user-lat") {
+            newInputData.userLat = newValue;
+        } else if (target.id === "user-lng") {
+            newInputData.userLng = newValue;
+        } else if (target.id === "meeting-pwd") {
+            newInputData.meetingPwd = newValue;
+        }
+
+        setInputData(newInputData);
+    }
+
+    let onSubmitHandler = (e) => {
+        e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
+
+        let body = {
+            "meet": {
+                "meet_name": inputData.meetingName,
+                "meet_pwd": inputData.meetingPwd,
+                "limit": inputData.limitOfMeeting
+            },
+            "user": {
+                "name": inputData.userName,
+                "latitude": inputData.userLat,
+                "longitude": inputData.userLng
+            }
+        }
+
+        axios.post('/api/user/add_master', body).then(response => {
+            console.log(response.data);
+            // console.log(body);
         });
+
+        // window.location.href = "/meeting_info";
     };
 
     return (
         <div>
             <p className="page-title">새 모임 만들기</p>
-            <div className="page-content">
+
+            <form className="page-content" onSubmit={onSubmitHandler}>
                 <div className="user-input-area">
                     <div
                         className={
@@ -60,17 +97,16 @@ function OpenMeetingPage(props) {
                                 <p>모임 이름</p>
                                 <input
                                     type="text"
-                                    name="meetingName"
                                     placeholder="모임 이름"
-                                    onChange={onChange}
-                                    value={meetingName}
+                                    id="meeting-name"
+                                    onChange={(e) => { onInputChange(e.target, inputData) }}
                                 />
                             </div>
 
                             <div>
                                 <p>인원수</p>
                                 <p>
-                                    최대 <input type="number" defaultValue="2" />명까지
+                                    최대 <input type="number" min="2" max="6" id="limit-of-meeting" onChange={(e) => { onInputChange(e.target, inputData) }} />명까지
                                 </p>
                                 <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
                             </div>
@@ -105,10 +141,8 @@ function OpenMeetingPage(props) {
                                 <p>닉네임</p>
                                 <input
                                     type="text"
-                                    name="memberName"
                                     placeholder="닉네임"
-                                    onChange={onChange}
-                                    value={memberName}
+                                    id="user-name" onChange={(e) => { onInputChange(e.target, inputData) }}
                                 />
                             </div>
 
@@ -129,6 +163,7 @@ function OpenMeetingPage(props) {
                         </div>
                     ) : null}
                 </div>
+
                 <div className="user-input-area">
                     <div
                         className={
@@ -161,6 +196,7 @@ function OpenMeetingPage(props) {
                         </div>
                     ) : null}
                 </div>
+
                 <div className="user-input-area">
                     <div
                         className={
@@ -178,7 +214,7 @@ function OpenMeetingPage(props) {
                         <div className="user-input-content">
                             <div className="input-area-3">
                                 <p>
-                                    비밀번호 <input type="password" />
+                                    비밀번호 <input type="password" id="meeting-pwd" onChange={(e) => { onInputChange(e.target, inputData) }} />
                                 </p>
                             </div>
 
@@ -190,17 +226,18 @@ function OpenMeetingPage(props) {
                                     }}
                                 >이전</button>
                                 <button
+                                    type="submit"
                                     className="submit-button"
-                                    onClick={() => {
-                                        window.location.href = "/meeting_info";
-                                    }}
+                                // onClick={() => {
+                                //     window.location.href = "/meeting_info";
+                                // }}
                                 >새 모임 생성</button>
                                 <button className="none">x</button>
                             </div>
                         </div>
                     ) : null}
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
