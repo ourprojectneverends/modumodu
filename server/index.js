@@ -108,19 +108,8 @@ app.post('/api/user/add_user', (req, res) => {
   });
 });
 
+/* 사용하지 않음
 app.post('/api/meet/add_meet', (req, res) => {
-  // client에서 새로운 meet이 생성되면 db에 저장
-  /*
-  meet_id_tmp: {
-      type: String,
-      maxlength: 10
-  },
-  users: [
-    {
-        type: mongoose.Schema.Types.ObjectId, ref:'User'
-    }
-  ]
-  */
   const meet = new Meet(req.body);
 
   //save()는 mongodb의 메서드
@@ -135,6 +124,7 @@ app.post('/api/meet/add_meet', (req, res) => {
   });
 
 });
+*/
 
 app.post('/api/user/login', (req, res) => {
   // 요청된 id가 db에 있는지 확인
