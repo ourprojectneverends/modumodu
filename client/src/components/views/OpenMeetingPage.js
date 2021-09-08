@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+/* global kakao */
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 // css
 import "./Meeting.css";
-
-// map component
-import { HostMap } from "./HostMap.js";
 
 function OpenMeetingPage(props) {
     let [userInputScreen, setUserInputScreen] = useState(0);
@@ -18,6 +16,71 @@ function OpenMeetingPage(props) {
         userLng: ""
     });
 
+    useEffect(() => {
+        if (userInputScreen == 2) {
+            mapDrawer();
+        }
+    }, [userInputScreen])
+
+    function mapDrawer() {
+        let mapContainer = document.getElementById('host-map');
+        let curLocationP = document.getElementById('host-location');
+
+        // gps로 현재 위치 받아오는 부분 START
+        let curLatitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
+        let curLongtitude = 126.570667;
+
+        function getLatLng(position) {
+            // 위도와 경도 저장하기
+            curLatitude = position.coords.latitude;
+            curLongtitude = position.coords.longitude;
+            console.log("내위치추적 완 " + curLatitude + "/" + curLongtitude);
+        }
+
+        function errorHandler(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        let gpsOptions = {
+            enableHighAccuracy: true,
+            timeout: 5000
+        };
+
+        navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
+        console.log("겟포지션 수행 완 " + curLatitude + "/" + curLongtitude);
+
+        let initialPosition = new window.kakao.maps.LatLng(curLatitude, curLongtitude);
+        console.log("초기위치 수행 완 " + curLatitude + "/" + curLongtitude);
+
+        let options = { //지도를 생성할 때 필요한 기본 옵션
+            center: initialPosition, //지도의 중심좌표.
+            level: 3 //지도의 레벨(확대, 축소 정도)
+        };
+
+        // 중심 좌표에 마커 만들기
+        let marker = new window.kakao.maps.Marker({
+            position: initialPosition
+        });
+
+        let map = new window.kakao.maps.Map(mapContainer, options);
+        marker.setMap(map);
+        let message = '선택한 위치의 위도 : ' + curLatitude + ', 경도 : ' + curLongtitude;
+        curLocationP.innerHTML = message;
+        onLatLngChange(curLatitude, curLongtitude, inputData);
+
+        // [지도 클릭 Event] 해당 포인트로 마커를 옮김
+        window.kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+            let selectedLocation = mouseEvent.latLng;
+            marker.setPosition(selectedLocation);
+
+            let newMessage = '선택한 위치의 위도 : ' + selectedLocation.getLat() + ', 경도 : ' + selectedLocation.getLng();
+            curLocationP.innerHTML = newMessage;
+            onLatLngChange(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
+        });
+
+        setTimeout(function () { map.relayout(); }, 1000);
+    }
+
     // const onReset = () => {
     //     setNewMeetingInputs({
     //         meetingName: "",
@@ -28,7 +91,18 @@ function OpenMeetingPage(props) {
     //     });
     // };
 
+    function onLatLngChange(latInput, lngInput, inputData) {
+        // 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
+        let newInputData = { ...inputData };
+
+        newInputData.userLat = latInput;
+        newInputData.userLng = lngInput;
+
+        setInputData(newInputData);
+    }
+
     function onInputChange(target, inputData) {
+        // 위도, 경도를 제외한 사용자 데이터가 변경될 때마다 감지하여 inputData를 업데이트해주는 함수
         let newValue = target.value;
         let newInputData = { ...inputData };
 
@@ -38,10 +112,6 @@ function OpenMeetingPage(props) {
             newInputData.limitOfMeeting = newValue;
         } else if (target.id === "user-name") {
             newInputData.userName = newValue;
-        } else if (target.id === "user-lat") {
-            newInputData.userLat = newValue;
-        } else if (target.id === "user-lng") {
-            newInputData.userLng = newValue;
         } else if (target.id === "meeting-pwd") {
             newInputData.meetingPwd = newValue;
         }
@@ -50,6 +120,7 @@ function OpenMeetingPage(props) {
     }
 
     let onSubmitHandler = (e) => {
+        // 입력한 데이터 제출
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
         let body = {
@@ -67,7 +138,7 @@ function OpenMeetingPage(props) {
 
         axios.post('/api/user/add_master', body).then(response => {
             console.log(response.data);
-            // console.log(body);
+            console.log(body);
         });
 
         // window.location.href = "/meeting_info";
@@ -78,7 +149,9 @@ function OpenMeetingPage(props) {
             <p className="page-title">새 모임 만들기</p>
 
             <form className="page-content" onSubmit={onSubmitHandler}>
+
                 <div className="user-input-area">
+
                     <div
                         className={
                             userInputScreen === 0
@@ -93,6 +166,8 @@ function OpenMeetingPage(props) {
                     </div>
                     {userInputScreen === 0 ? (
                         <div className="user-input-content">
+
+
                             <div>
                                 <p>모임 이름</p>
                                 <input
@@ -177,7 +252,10 @@ function OpenMeetingPage(props) {
                     >출발할 위치를 선택해 주세요</div>
                     {userInputScreen === 2 ? (
                         <div className="user-input-content">
-                            <HostMap />
+                            <div className="map-area">
+                                <div id="host-map" />
+                                <p id="host-location"></p>
+                            </div>
 
                             <div className="user-input-buttons">
                                 <button
@@ -228,9 +306,6 @@ function OpenMeetingPage(props) {
                                 <button
                                     type="submit"
                                     className="submit-button"
-                                // onClick={() => {
-                                //     window.location.href = "/meeting_info";
-                                // }}
                                 >새 모임 생성</button>
                                 <button className="none">x</button>
                             </div>
