@@ -81,16 +81,6 @@ function OpenMeetingPage(props) {
         setTimeout(function () { map.relayout(); }, 1000);
     }
 
-    // const onReset = () => {
-    //     setNewMeetingInputs({
-    //         meetingName: "",
-    //         memberName: "",
-    //         lat: "",
-    //         lng: "",
-    //         meetingLimit: "",
-    //     });
-    // };
-
     function onLatLngChange(latInput, lngInput, inputData) {
         // 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
         let newInputData = { ...inputData };
@@ -294,6 +284,7 @@ function OpenMeetingPage(props) {
                                 <p>
                                     비밀번호 <input type="password" id="meeting-pwd" onChange={(e) => { onInputChange(e.target, inputData) }} />
                                 </p>
+                                <p>* 모임에 참여할 때 사용되는 비밀번호로, 초대 시 공유되므로 사적인 비밀번호를 사용하지 마세요!</p>
                             </div>
 
                             <div className="user-input-buttons">
