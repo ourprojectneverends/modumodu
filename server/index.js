@@ -53,7 +53,7 @@ app.post('/api/user/add_master', (req, res) => {
         });
         else return res.status(200).json({
           success: true,
-          message: "Your request is processed succesfully!"
+          message: "Your request is processed successfully!"
         });
       });
     }
@@ -98,7 +98,7 @@ app.post('/api/user/add_user', (req, res) => {
             else {
               return res.status(200).json({
                 success: true,
-                message: "Your request is processed succesfully!"
+                message: "Your request is processed successfully!"
               });
             }
           });
@@ -108,15 +108,39 @@ app.post('/api/user/add_user', (req, res) => {
   });
 });
 
-/* 사용하지 않음
-app.post('/api/meet/add_meet', (req, res) => {
+app.post('/api/user/join_meet', async (req, res) => {
+  //req body sample: {"id":"613a0cf85987b6413079e6b4", "pw":"1234"}
+  // 요청된 id가 db에 있는지 확인
+  const meet = await Meet.findById(req.body.id);
+  if(!meet) return res.json({
+    success: false,
+    message: "[Find Meet] Process failed"
+  });
+
+  meet.comparePassword(req.body.pw, (err, isMatch) => {
+    if(!isMatch){
+      return res.json({
+        success: false,
+        message: "[PWD Check] Process failed"
+      });
+    }
+    return res.json({
+      success: true,
+      message: `Successfully Accessed Meet [${meet.meet_name}] :)`,
+      now_memCount: meet.users.length
+    });  
+  });
+});
+
+//meet 추가 test용 api
+app.post('/api/meet/test_add_meet', (req, res) => {
+  // client에서 새로운 meet이 생성되면 db에 저장
   const meet = new Meet(req.body);
 
   //save()는 mongodb의 메서드
   meet.save((err, doc) => {
-    if(err) return res.status(400).json({
+    if(err) return res.json({
       success: false,
-      err
     });
     else return res.status(200).json({
       success: true
@@ -124,7 +148,6 @@ app.post('/api/meet/add_meet', (req, res) => {
   });
 
 });
-*/
 
 app.post('/api/user/login', (req, res) => {
   // 요청된 id가 db에 있는지 확인
@@ -164,12 +187,6 @@ app.post('/api/user/login', (req, res) => {
     }
   });
 });
-
-
-app.get('/api/hello', (req, res) => {
-  res.send('hello world!');
-});
-
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
