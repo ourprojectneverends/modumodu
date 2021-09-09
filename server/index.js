@@ -46,14 +46,15 @@ app.post('/api/user/add_master', (req, res) => {
       temp_meet.users = [savedUser.id];
 
       const meet = new Meet(temp_meet);
-      meet.save((err, doc) => {
+      meet.save((err, savedMeet) => {
         if(err) return res.status(400).json({
           success: false,
           message: "[Add Meet] Process failed"
         });
         else return res.status(200).json({
           success: true,
-          message: "Your request is processed successfully!"
+          message: "Your request is processed successfully!",
+          created_meet_id: savedMeet._id
         });
       });
     }
