@@ -36,10 +36,9 @@ app.post('/api/user/add_master', (req, res) => {
   const user = new User(req.body.user);
   //save()는 mongodb의 메서드
   user.save((err, savedUser) => {
-    if(err) return res.json({ //user 저장 실패
+    if(err) return res.status(400).json({ //user 저장 실패
       success: false,
-      message: "Add User",
-      err
+      message: "[Add Master] Process failed"
     });
     else { //user 저장 성공
       //meet 생성
@@ -48,14 +47,13 @@ app.post('/api/user/add_master', (req, res) => {
 
       const meet = new Meet(temp_meet);
       meet.save((err, doc) => {
-        if(err) return res.json({
+        if(err) return res.status(400).json({
           success: false,
-          message: "Add Meet",
-          err
+          message: "[Add Meet] Process failed"
         });
         else return res.status(200).json({
           success: true,
-          doc
+          message: "Your request is processed successfully!"
         });
       });
     }
@@ -74,9 +72,9 @@ app.post('/api/user/add_user', (req, res) => {
   Meet.findById(req.body.meet_id)
   .lean().exec(function (err, meet){
     if(err) { // 없으면 false
-      return res.json({
-        loginSuccess: false,
-        message: "해당 meet 없음."
+      return res.status(400).json({
+        success: false,
+        message: "No meet found matching the requested id.."
       });
     }else{
       //2. 있으면 add user 작업
@@ -84,9 +82,9 @@ app.post('/api/user/add_user', (req, res) => {
       const user = new User(req.body.user);
       //save()는 mongodb의 메서드
       user.save((err, savedUser) => {
-        if(err) return res.json({ //user 저장 실패
+        if(err) return res.status(400).json({ //user 저장 실패
           success: false,
-          err
+          message: "[Add User] Process failed"
         });
         else { //user 저장 성공
           //2-2. meet 테이블의 users에 user id push
@@ -95,11 +93,12 @@ app.post('/api/user/add_user', (req, res) => {
           }, function(err, old){
             if (err) return res.status(400).json({
               success: false,
-              err
+              message: "[Push User] Process failed"
             });
             else {
               return res.status(200).json({
-                success: true
+                success: true,
+                message: "Your request is processed successfully!"
               });
             }
           });
@@ -109,26 +108,39 @@ app.post('/api/user/add_user', (req, res) => {
   });
 });
 
-app.post('/api/meet/add_meet', (req, res) => {
-  // client에서 새로운 meet이 생성되면 db에 저장
-  /*
-  meet_id_tmp: {
-      type: String,
-      maxlength: 10
-  },
-  users: [
-    {
-        type: mongoose.Schema.Types.ObjectId, ref:'User'
+app.post('/api/user/join_meet', async (req, res) => {
+  //req body sample: {"id":"613a0cf85987b6413079e6b4", "pw":"1234"}
+  // 요청된 id가 db에 있는지 확인
+  const meet = await Meet.findById(req.body.id);
+  if(!meet) return res.json({
+    success: false,
+    message: "[Find Meet] Process failed"
+  });
+
+  meet.comparePassword(req.body.pw, (err, isMatch) => {
+    if(!isMatch){
+      return res.json({
+        success: false,
+        message: "[PWD Check] Process failed"
+      });
     }
-  ]
-  */
+    return res.json({
+      success: true,
+      message: `Successfully Accessed Meet [${meet.meet_name}] :)`,
+      now_memCount: meet.users.length
+    });  
+  });
+});
+
+//meet 추가 test용 api
+app.post('/api/meet/test_add_meet', (req, res) => {
+  // client에서 새로운 meet이 생성되면 db에 저장
   const meet = new Meet(req.body);
 
   //save()는 mongodb의 메서드
   meet.save((err, doc) => {
     if(err) return res.json({
       success: false,
-      err
     });
     else return res.status(200).json({
       success: true
@@ -175,12 +187,6 @@ app.post('/api/user/login', (req, res) => {
     }
   });
 });
-
-
-app.get('/api/hello', (req, res) => {
-  res.send('hello world!');
-});
-
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
