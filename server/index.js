@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const port = 8080;
 
+const crypto = require('crypto-js');
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
@@ -23,17 +25,19 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+// 방장 추가 API (새로운 meet과 새로운 user를 생성)
 app.post('/api/user/add_master', (req, res) => {
   /*
   request body sample
   {
     "meet":{"meet_name": "테스트1", "meet_pwd": "password", "limit": "6"},
-    "user":{"name":"철수", "latitude":"33.450701", "longitude":"126.570667"}
+    "user":{"name":"민수", "pos":{"lat":33.450701,"long":126.570667}}
   }
   */
   
   // 1. user 추가
-  const user = new User(req.body.user);
+  let user = new User(req.body.user);
+  user.pos = JSON.stringify(req.body.user.pos);
   //save()는 mongodb의 메서드
   user.save((err, savedUser) => {
     if(err) return res.status(400).json({ //user 저장 실패
@@ -61,12 +65,13 @@ app.post('/api/user/add_master', (req, res) => {
   });
 });
 
+// 사용자 추가 API (기존의 meet에 새로운 user를 생성)
 app.post('/api/user/add_user', (req, res) => {
   /*
   request body sample
   {
     "meet_id": "61334ba85b7e700f18b305b3",
-    "user":{"name":"철수", "latitude":"33.450701", "longitude":"126.570667"}
+    "user":{"name":"민수", "pos":{"lat":33.450701,"long":126.570667}}
   }
   */
   //1. 해당 meet이 db에 있는지 체크
@@ -80,7 +85,8 @@ app.post('/api/user/add_user', (req, res) => {
     }else{
       //2. 있으면 add user 작업
       //2-1. user 저장
-      const user = new User(req.body.user);
+      let user = new User(req.body.user);
+      user.pos = JSON.stringify(req.body.user.pos);
       //save()는 mongodb의 메서드
       user.save((err, savedUser) => {
         if(err) return res.status(400).json({ //user 저장 실패
@@ -109,6 +115,7 @@ app.post('/api/user/add_user', (req, res) => {
   });
 });
 
+// 기존의 meet에 참여할 때 id와 pw를 검증하는 API
 app.post('/api/user/join_meet', async (req, res) => {
   //req body sample: {"id":"613a0cf85987b6413079e6b4", "pw":"1234"}
   // 요청된 id가 db에 있는지 확인
@@ -134,7 +141,7 @@ app.post('/api/user/join_meet', async (req, res) => {
 });
 
 //meet 추가 test용 api
-app.post('/api/meet/test_add_meet', (req, res) => {
+app.post('/api/test/add_meet', (req, res) => {
   // client에서 새로운 meet이 생성되면 db에 저장
   const meet = new Meet(req.body);
 
@@ -147,25 +154,41 @@ app.post('/api/meet/test_add_meet', (req, res) => {
       success: true
     });
   });
-
 });
 
-app.post('/api/user/login', (req, res) => {
+//user 추가 test용 api
+app.post('/api/test/add_user', (req, res) => {
+  let user = new User(req.body);
+  user.pos = JSON.stringify(req.body.pos);
+  //save()는 mongodb의 메서드
+  user.save((err, doc) => {
+    if(err) return res.json({
+      success: false,
+    });
+    else return res.status(200).json({
+      success: true
+    });
+  });
+});
+
+//user 조회 test용 api
+app.post('/api/test/get_user', (req, res) => {
   // 요청된 id가 db에 있는지 확인
-  User.findById(req.body._id)
+  User.findById(req.body.user_id)
   .lean().exec(function (err, user){
     if(err) {
       return res.json({
-        loginSuccess: false,
+        success: false,
         message: "해당 유저 없음."
       });
     }else{
+      let userData = user;
+      let bytes = crypto.AES.decrypt(userData.pos, config.AES_KEY);
+      let decrypted = bytes.toString(crypto.enc.Utf8);
+      userData.pos = JSON.parse(decrypted);
       return res.json({
-        loginSuccess: true,
-        userId: user._id,
-        latitude: user.latitude,
-        longitude: user.longitude,
-        message: `hello! ${user.name} :)`
+        success: true,
+        userData
       });      
       /*
       // 토큰 만들고 브라우저 쿠키에 저장하는 부분인데
