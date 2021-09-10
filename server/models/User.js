@@ -1,36 +1,37 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto-js');
+
+const config = require('../js/config/key');
 
 const userSchema = mongoose.Schema({
     name: {
         type: String,
         maxlength: 10
     },
-    // meet: {
-    //     type: Schema.Types.ObjectId, ref: 'Meet'
-    // },
-    latitude: {
-        type: Number
-    },
-    longitude: {
-        type: Number
-    },
     token: {
+        type: String
+    },
+    pos: {
         type: String
     }
 });
 
-/*
+
 userSchema.pre('save', function( next ){
-
-    // latitude, longitude 암호화
-
-
-
-    next();
+    let user = this;
+    if(user.isModified('pos')){
+        const ciphertext = crypto.AES.encrypt(user.pos, config.AES_KEY).toString();
+        user.pos = ciphertext;
+        next();
+    }else{
+        next();
+    }
 });
-*/
 
+/*
 userSchema.methods.generateToken = function(cb) {
     var user = this;
     //jsonwebtoken을 이용한 토큰 생성
@@ -41,6 +42,6 @@ userSchema.methods.generateToken = function(cb) {
         else cb(null, user)
     });
 }
-
+*/
 const User = mongoose.model('User', userSchema);
 module.exports = { User };
