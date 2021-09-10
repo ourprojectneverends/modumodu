@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+// 방장 추가 API (새로운 meet과 새로운 user를 생성)
 app.post('/api/user/add_master', (req, res) => {
   /*
   request body sample
@@ -64,6 +65,7 @@ app.post('/api/user/add_master', (req, res) => {
   });
 });
 
+// 사용자 추가 API (기존의 meet에 새로운 user를 생성)
 app.post('/api/user/add_user', (req, res) => {
   /*
   request body sample
@@ -113,6 +115,7 @@ app.post('/api/user/add_user', (req, res) => {
   });
 });
 
+// 기존의 meet에 참여할 때 id와 pw를 검증하는 API
 app.post('/api/user/join_meet', async (req, res) => {
   //req body sample: {"id":"613a0cf85987b6413079e6b4", "pw":"1234"}
   // 요청된 id가 db에 있는지 확인
@@ -168,7 +171,7 @@ app.post('/api/test/add_user', (req, res) => {
   });
 });
 
-
+//user 조회 test용 api
 app.post('/api/test/get_user', (req, res) => {
   // 요청된 id가 db에 있는지 확인
   User.findById(req.body.user_id)
