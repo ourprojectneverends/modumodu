@@ -123,8 +123,8 @@ function OpenMeetingPage(props) {
             "user": {
                 "name": inputData.userName,
                 "pos": {
-                    "latitude": inputData.userLat,
-                    "longitude": inputData.userLng
+                    "lat": inputData.userLat,
+                    "long": inputData.userLng
                 }
             }
         }
@@ -133,8 +133,8 @@ function OpenMeetingPage(props) {
             if (response.data.success) {
                 // console.log(response.data);
                 alert("모임이 정상적으로 생성되었습니다!");
-                window.location.href = "/meeting_info";
-            }else{
+                window.location.href = "/meeting_info?id=" + response.data.created_meet_id;
+            } else {
                 alert("모임 생성에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
             }
         }).catch((error) => {
@@ -147,9 +147,7 @@ function OpenMeetingPage(props) {
             <p className="page-title">새 모임 만들기</p>
 
             <form className="page-content" onSubmit={onSubmitHandler}>
-
                 <div className="user-input-area">
-
                     <div
                         className={
                             userInputScreen === 0
