@@ -136,7 +136,7 @@ app.post('/api/user/join_meet', async (req, res) => {
       success: true,
       message: `Successfully Accessed Meet [${meet.meet_name}] :)`,
       meetMemCount: meet.users.length,
-      meetMemLimit: meet.users.limit
+      meetMemLimit: meet.limit
     });  
   });
 });
