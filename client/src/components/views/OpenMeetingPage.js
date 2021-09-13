@@ -23,6 +23,7 @@ function OpenMeetingPage(props) {
     }, [userInputScreen])
 
     function mapDrawer() {
+        // 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
         let mapContainer = document.getElementById('host-map');
         let curLocationP = document.getElementById('host-location');
 
@@ -81,16 +82,6 @@ function OpenMeetingPage(props) {
         setTimeout(function () { map.relayout(); }, 1000);
     }
 
-    // const onReset = () => {
-    //     setNewMeetingInputs({
-    //         meetingName: "",
-    //         memberName: "",
-    //         lat: "",
-    //         lng: "",
-    //         meetingLimit: "",
-    //     });
-    // };
-
     function onLatLngChange(latInput, lngInput, inputData) {
         // 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
         let newInputData = { ...inputData };
@@ -120,7 +111,7 @@ function OpenMeetingPage(props) {
     }
 
     let onSubmitHandler = (e) => {
-        // 입력한 데이터 제출
+        // 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
         let body = {
@@ -131,17 +122,24 @@ function OpenMeetingPage(props) {
             },
             "user": {
                 "name": inputData.userName,
-                "latitude": inputData.userLat,
-                "longitude": inputData.userLng
+                "pos": {
+                    "latitude": inputData.userLat,
+                    "longitude": inputData.userLng
+                }
             }
         }
 
         axios.post('/api/user/add_master', body).then(response => {
-            console.log(response.data);
-            console.log(body);
+            if (response.data.success) {
+                // console.log(response.data);
+                alert("모임이 정상적으로 생성되었습니다!");
+                window.location.href = "/meeting_info";
+            }else{
+                alert("모임 생성에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+            }
+        }).catch((error) => {
+            console.log(error.response);
         });
-
-        // window.location.href = "/meeting_info";
     };
 
     return (
@@ -166,7 +164,6 @@ function OpenMeetingPage(props) {
                     </div>
                     {userInputScreen === 0 ? (
                         <div className="user-input-content">
-
 
                             <div>
                                 <p>모임 이름</p>
@@ -294,6 +291,7 @@ function OpenMeetingPage(props) {
                                 <p>
                                     비밀번호 <input type="password" id="meeting-pwd" onChange={(e) => { onInputChange(e.target, inputData) }} />
                                 </p>
+                                <p>* 모임에 참여할 때 사용되는 비밀번호로, 초대 시 공유되므로 사적인 비밀번호를 사용하지 마세요!</p>
                             </div>
 
                             <div className="user-input-buttons">

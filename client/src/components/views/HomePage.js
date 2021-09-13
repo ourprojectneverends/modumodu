@@ -31,7 +31,7 @@ function HomePage() {
                         모임 주최자가 모든 사람의 위치를 수집할 필요 없이, 각자 입력하면
                         끝!
                     </p>
-                    <img src="./img/travel.png"></img>
+                    <img src="./img/travel.png" alt=""></img>
                 </div>
                 <div className="detail-element">
                     <p>- 2 -</p>
@@ -40,7 +40,7 @@ function HomePage() {
                         어디서 만날지 캡쳐해서 보낼 필요 없이 [카카오톡 공유] 하나로
                         메세지 전달 가능!
                     </p>
-                    <img src="./img/travel.png"></img>
+                    <img src="./img/travel.png" alt=""></img>
                 </div>
                 <div className="detail-element">
                     <p>- 3 -</p>
@@ -49,7 +49,7 @@ function HomePage() {
                         모임 참여자들의 위치를 고려한 모임 장소로 모두가 만족할 수 있는
                         모임 장소 설정!
                     </p>
-                    <img src="./img/travel.png"></img>
+                    <img src="./img/travel.png" alt=""></img>
                 </div>
 
                 <button
