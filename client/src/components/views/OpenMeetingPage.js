@@ -23,6 +23,7 @@ function OpenMeetingPage(props) {
     }, [userInputScreen])
 
     function mapDrawer() {
+        // 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
         let mapContainer = document.getElementById('host-map');
         let curLocationP = document.getElementById('host-location');
 
@@ -110,7 +111,7 @@ function OpenMeetingPage(props) {
     }
 
     let onSubmitHandler = (e) => {
-        // 입력한 데이터 제출
+        // 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
         let body = {
@@ -121,17 +122,24 @@ function OpenMeetingPage(props) {
             },
             "user": {
                 "name": inputData.userName,
-                "latitude": inputData.userLat,
-                "longitude": inputData.userLng
+                "pos": {
+                    "latitude": inputData.userLat,
+                    "longitude": inputData.userLng
+                }
             }
         }
 
         axios.post('/api/user/add_master', body).then(response => {
-            console.log(response.data);
-            console.log(body);
+            if (response.data.success) {
+                // console.log(response.data);
+                alert("모임이 정상적으로 생성되었습니다!");
+                window.location.href = "/meeting_info";
+            }else{
+                alert("모임 생성에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+            }
+        }).catch((error) => {
+            console.log(error.response);
         });
-
-        // window.location.href = "/meeting_info";
     };
 
     return (
@@ -156,7 +164,6 @@ function OpenMeetingPage(props) {
                     </div>
                     {userInputScreen === 0 ? (
                         <div className="user-input-content">
-
 
                             <div>
                                 <p>모임 이름</p>
