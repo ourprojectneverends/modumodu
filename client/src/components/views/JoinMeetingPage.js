@@ -110,30 +110,33 @@ function JoinMeetingPage(props) {
         setInputData(newInputData);
     }
 
-    let onSubmitHandler = (e) => {
-        // 입력한 데이터 제출
+    function sendJoinData(e) {
+        // 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
-        let body = {
-            "meet": {
-                "meet_name": inputData.meetingName,
-                "meet_pwd": inputData.meetingPwd,
-                "limit": inputData.limitOfMeeting
-            },
+        let userData = {
+            "meet_id": inputData.meetingName,
             "user": {
                 "name": inputData.userName,
-                "latitude": inputData.userLat,
-                "longitude": inputData.userLng
+                "pos": {
+                    "lat": inputData,
+                    "long": inputData
+                }
             }
         }
 
-        axios.post('/api/user/add_user', body).then(response => {
-            console.log(response.data);
-            console.log(body);
+        axios.post('/api/user/add_user', userData).then(response => {
+            if (response.data.success) {
+                console.log(response.data);
+                // alert("모임이 정상적으로 참여했습니다!");
+                // window.location.href = "/meeting_info?id=" + response.data.created_meet_id;
+            } else {
+                alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+            }
+        }).catch((error) => {
+            console.log(error.response);
         });
-
-        // window.location.href = "/meeting_info";
-    };
+    }
 
     function isVaildPassword(e) {
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
@@ -147,10 +150,8 @@ function JoinMeetingPage(props) {
         let inputPassword = document.getElementById("passwordToJoin").value;
 
         let sendData = {
-            data: {
-                "id": inputId,
-                "pw": inputPassword
-            }
+            "id": inputId,
+            "pw": inputPassword
         }
 
         axios.post("/api/user/join_meet", sendData).then(response => {
