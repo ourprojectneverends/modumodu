@@ -26,41 +26,47 @@ function JoinMeetingPage(props) {
 
     function mapDrawer() {
         // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
+        var geocoder = new kakao.maps.services.Geocoder();
         let mapContainer = document.getElementById('client-map');
         let curLocationP = document.getElementById('client-location');
 
-        let curLatitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
+        // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
+        let curLatitude = 33.450701;
         let curLongtitude = 126.570667;
-
-        let initialPosition = new window.kakao.maps.LatLng(curLatitude, curLongtitude);
+        let initialPosition = new kakao.maps.LatLng(curLatitude, curLongtitude);
 
         let options = {
             // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
             center: initialPosition,
             level: 3
         };
-        let map = new window.kakao.maps.Map(mapContainer, options);
+        let map = new kakao.maps.Map(mapContainer, options);
 
         // 중심 좌표에 마커 만들기
-        let marker = new window.kakao.maps.Marker({
+        let marker = new kakao.maps.Marker({
             position: initialPosition
         });
         marker.setMap(map);
 
-        let message = '선택한 위치의 위도 : ' + curLatitude + ', 경도 : ' + curLongtitude;
-        curLocationP.innerHTML = message;
+        let printAddress = function (result, status) {
+            // 위도, 경도에 따라 지번 주소를 curLocationP에 출력해주는 콜백함수
+            if (status === kakao.maps.services.Status.OK) {
+                curLocationP.innerHTML = result[0].address.address_name;
+            }
+        };
+
+        geocoder.coord2Address(curLongtitude, curLatitude, printAddress);
         changeLatLngData(curLatitude, curLongtitude, inputData);
 
+        setTimeout(function () { map.relayout(); }, 1000);
+
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
-        window.kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
-            let newMessage = '선택한 위치의 위도 : ' + selectedLocation.getLat() + ', 경도 : ' + selectedLocation.getLng();
-            curLocationP.innerHTML = newMessage;
+            geocoder.coord2Address(selectedLocation.getLng(), selectedLocation.getLat(), printAddress);
             changeLatLngData(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
         });
-
-        setTimeout(function () { map.relayout(); }, 1000);
     }
 
     function changeLatLngData(latInput, lngInput, inputData) {
@@ -127,8 +133,6 @@ function JoinMeetingPage(props) {
             "id": idValue,
             "pw": inputPassword
         }
-
-        console.log(sendData);
 
         axios.post("/api/user/join_meet", sendData).then(response => {
             // console.log(response.data);
