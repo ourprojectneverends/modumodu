@@ -8,10 +8,11 @@ import "./Meeting.css";
 function JoinMeetingPage(props) {
     let [certified, setCertified] = useState(false);
     let [userInputScreen, setUserInputScreen] = useState(0);
+
+    let [meetingId, setMeetingId] = useState("");
+    let [meetingName, setMeetingName] = useState("");
+    let [numberOfPeopleState, setNumberOfPeopleState] = useState("");
     let [inputData, setInputData] = useState({
-        meetingName: "",
-        meetingPwd: "",
-        limitOfMeeting: "",
         userName: "",
         userLat: "",
         userLng: ""
@@ -24,112 +25,84 @@ function JoinMeetingPage(props) {
     }, [userInputScreen])
 
     function mapDrawer() {
+        // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
         let mapContainer = document.getElementById('client-map');
         let curLocationP = document.getElementById('client-location');
 
-        // gps로 현재 위치 받아오는 부분 START
         let curLatitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
         let curLongtitude = 126.570667;
 
-        function getLatLng(position) {
-            // 위도와 경도 저장하기
-            curLatitude = position.coords.latitude;
-            curLongtitude = position.coords.longitude;
-            console.log("내위치추적 완 " + curLatitude + "/" + curLongtitude);
-        }
-
-        function errorHandler(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
-
-        let gpsOptions = {
-            enableHighAccuracy: true,
-            timeout: 5000
-        };
-
-        navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
-        console.log("겟포지션 수행 완 " + curLatitude + "/" + curLongtitude);
-
         let initialPosition = new window.kakao.maps.LatLng(curLatitude, curLongtitude);
-        console.log("초기위치 수행 완 " + curLatitude + "/" + curLongtitude);
 
-        let options = { //지도를 생성할 때 필요한 기본 옵션
-            center: initialPosition, //지도의 중심좌표.
-            level: 3 //지도의 레벨(확대, 축소 정도)
+        let options = {
+            // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
+            center: initialPosition,
+            level: 3
         };
+        let map = new window.kakao.maps.Map(mapContainer, options);
 
         // 중심 좌표에 마커 만들기
         let marker = new window.kakao.maps.Marker({
             position: initialPosition
         });
-
-        let map = new window.kakao.maps.Map(mapContainer, options);
         marker.setMap(map);
+
         let message = '선택한 위치의 위도 : ' + curLatitude + ', 경도 : ' + curLongtitude;
         curLocationP.innerHTML = message;
-        onLatLngChange(curLatitude, curLongtitude, inputData);
+        changeLatLngData(curLatitude, curLongtitude, inputData);
 
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
         window.kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
-
             let newMessage = '선택한 위치의 위도 : ' + selectedLocation.getLat() + ', 경도 : ' + selectedLocation.getLng();
             curLocationP.innerHTML = newMessage;
-            onLatLngChange(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
+            changeLatLngData(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
         });
 
         setTimeout(function () { map.relayout(); }, 1000);
     }
 
-    function onLatLngChange(latInput, lngInput, inputData) {
-        // 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
+    function changeLatLngData(latInput, lngInput, inputData) {
+        // changeLatLngData : 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
         let newInputData = { ...inputData };
-
         newInputData.userLat = latInput;
         newInputData.userLng = lngInput;
-
         setInputData(newInputData);
     }
 
     function onInputChange(target, inputData) {
-        // 위도, 경도를 제외한 사용자 데이터가 변경될 때마다 감지하여 inputData를 업데이트해주는 함수
+        // onInputChange : 위도, 경도를 제외한 사용자 데이터가 변경될 때마다 감지하여 inputData를 업데이트해주는 함수
         let newValue = target.value;
         let newInputData = { ...inputData };
 
-        if (target.id === "meeting-name") {
-            newInputData.meetingName = newValue;
-        } else if (target.id === "limit-of-meeting") {
-            newInputData.limitOfMeeting = newValue;
-        } else if (target.id === "user-name") {
+        if (target.id === "user-name") {
             newInputData.userName = newValue;
-        } else if (target.id === "meeting-pwd") {
-            newInputData.meetingPwd = newValue;
         }
 
         setInputData(newInputData);
     }
 
     function sendJoinData(e) {
-        // 입력한 데이터를 post로 서버에 전송하는 함수
+        // sendJoinData : 모임에 참여하려는 유저가 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
         let userData = {
-            "meet_id": inputData.meetingName,
+            "meet_id": meetingId,
             "user": {
                 "name": inputData.userName,
                 "pos": {
-                    "lat": inputData,
-                    "long": inputData
+                    "lat": inputData.userLat,
+                    "long": inputData.userLng
                 }
             }
         }
 
         axios.post('/api/user/add_user', userData).then(response => {
+            // console.log(response.data);
             if (response.data.success) {
-                console.log(response.data);
-                // alert("모임이 정상적으로 참여했습니다!");
-                // window.location.href = "/meeting_info?id=" + response.data.created_meet_id;
+                alert("모임에 정상적으로 참여했습니다!");
+                window.location.href = "/meeting_info?id=" + meetingId;
             } else {
                 alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
             }
@@ -139,29 +112,34 @@ function JoinMeetingPage(props) {
     }
 
     function isVaildPassword(e) {
-        e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
+        // isVaildPassword : 모임에 참가하기 위해 비밀번호를 입력했을 때 처리해주는 함수
+        e.preventDefault();     // 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
         // URL에서 id parameter를 읽기
         let currentURL = decodeURI(window.location.href);
         let parameters = new URLSearchParams(currentURL.split("?")[1]);
-        let inputId = parameters.get("id");
+        let idValue = parameters.get("id");
 
         // 입력한 pwd값을 읽기
         let inputPassword = document.getElementById("passwordToJoin").value;
 
         let sendData = {
-            "id": inputId,
+            "id": idValue,
             "pw": inputPassword
         }
 
+        console.log(sendData);
+
         axios.post("/api/user/join_meet", sendData).then(response => {
+            // console.log(response.data);
             if (response.data.success) {
+                setMeetingId(idValue);
+                setMeetingName(response.data.meetName);
+                setNumberOfPeopleState(response.data.meetMemCount + " / " + response.data.meetMemLimit);
                 setCertified(true);
             } else {
-                console.log(response.data);
-                console.log(sendData);
-                // alert("존재하지 않는 모임이거나, 입력한 비밀번호가 틀렸습니다.");
-                // window.location.reload();
+                alert("존재하지 않는 모임이거나, 입력한 비밀번호가 틀렸습니다.");
+                window.location.reload();
             }
         }).catch((error) => {
             console.log(error.response);
@@ -185,13 +163,10 @@ function JoinMeetingPage(props) {
                     </button>
                 </div>
             ) : (
-                <div className="page-content">
+                <form className="page-content" onSubmit={(e) => { sendJoinData(e) }}>
                     <div className="join-meeting-info">
-                        <p>{props.meetingData[0].name}</p>
-                        <p>
-                            현재 참여자 수 {props.meetingData[0].memberNum}/
-                            {props.meetingData[0].memberLimit}
-                        </p>
+                        <p>{meetingName}</p>
+                        <p>현재 참여자 수 {numberOfPeopleState}</p>
                     </div>
 
                     <div className="user-input-area">
@@ -209,8 +184,11 @@ function JoinMeetingPage(props) {
                             <div className="user-input-content">
                                 <div>
                                     <p>닉네임</p>
-                                    <input type="text" placeholder="sims" />
+                                    <input type="text"
+                                        placeholder="닉네임"
+                                        id="user-name" onChange={(e) => { onInputChange(e.target, inputData) }} value={inputData.userName} />
                                 </div>
+
                                 <div className="user-input-buttons">
                                     <button className="none">x</button>
                                     <button
@@ -249,6 +227,7 @@ function JoinMeetingPage(props) {
                                         }}
                                     >이전</button>
                                     <button
+                                        type="submit"
                                         className="submit-button"
                                     >모임 참여하기</button>
                                     <button className="none">x</button>
@@ -256,7 +235,7 @@ function JoinMeetingPage(props) {
                             </div>
                         ) : null}
                     </div>
-                </div>
+                </form>
             )}
         </div>
     );
