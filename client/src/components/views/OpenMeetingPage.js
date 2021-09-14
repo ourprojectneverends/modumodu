@@ -5,8 +5,8 @@ import axios from 'axios';
 // css
 import "./Meeting.css";
 
-function OpenMeetingPage(props) {
-    let [userInputScreen, setUserInputScreen] = useState(0);
+function OpenMeetingPage() {
+    let [currentScreen, setCurrentScreen] = useState(0);
     let [inputData, setInputData] = useState({
         meetingName: "",
         meetingPwd: "",
@@ -17,83 +17,81 @@ function OpenMeetingPage(props) {
     });
 
     useEffect(() => {
-        if (userInputScreen == 2) {
+        if (currentScreen == 2) {
             mapDrawer();
         }
-    }, [userInputScreen])
+    }, [currentScreen])
 
     function mapDrawer() {
-        // 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
+        // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
         let mapContainer = document.getElementById('host-map');
         let curLocationP = document.getElementById('host-location');
 
-        // gps로 현재 위치 받아오는 부분 START
         let curLatitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
         let curLongtitude = 126.570667;
 
-        function getLatLng(position) {
-            // 위도와 경도 저장하기
-            curLatitude = position.coords.latitude;
-            curLongtitude = position.coords.longitude;
-            console.log("내위치추적 완 " + curLatitude + "/" + curLongtitude);
-        }
+        // gps로 현재 위치 받아오는 부분 START
+        // navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
+        // console.log("겟포지션 수행 완 " + curLatitude + "/" + curLongtitude);
 
-        function errorHandler(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
+        // function getLatLng(position) {
+        //     // 위도와 경도 저장하기
+        //     curLatitude = position.coords.latitude;
+        //     curLongtitude = position.coords.longitude;
+        //     console.log("내위치추적 완 " + curLatitude + "/" + curLongtitude);
+        // }
 
-        let gpsOptions = {
-            enableHighAccuracy: true,
-            timeout: 5000
-        };
+        // function errorHandler(err) {
+        //     console.warn(`ERROR(${err.code}): ${err.message}`);
+        // }
 
-        navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
-        console.log("겟포지션 수행 완 " + curLatitude + "/" + curLongtitude);
+        // let gpsOptions = {
+        //     enableHighAccuracy: true,
+        //     timeout: 5000
+        // };
+        // gps로 현재 위치 받아오는 부분 END
 
         let initialPosition = new window.kakao.maps.LatLng(curLatitude, curLongtitude);
-        console.log("초기위치 수행 완 " + curLatitude + "/" + curLongtitude);
 
-        let options = { //지도를 생성할 때 필요한 기본 옵션
-            center: initialPosition, //지도의 중심좌표.
-            level: 3 //지도의 레벨(확대, 축소 정도)
+        let options = {
+            // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
+            center: initialPosition,
+            level: 3
         };
+        let map = new window.kakao.maps.Map(mapContainer, options);
 
         // 중심 좌표에 마커 만들기
         let marker = new window.kakao.maps.Marker({
             position: initialPosition
         });
-
-        let map = new window.kakao.maps.Map(mapContainer, options);
         marker.setMap(map);
+
         let message = '선택한 위치의 위도 : ' + curLatitude + ', 경도 : ' + curLongtitude;
         curLocationP.innerHTML = message;
-        onLatLngChange(curLatitude, curLongtitude, inputData);
+        changeLatLngData(curLatitude, curLongtitude, inputData);
 
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
         window.kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
-
             let newMessage = '선택한 위치의 위도 : ' + selectedLocation.getLat() + ', 경도 : ' + selectedLocation.getLng();
             curLocationP.innerHTML = newMessage;
-            onLatLngChange(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
+            changeLatLngData(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
         });
 
         setTimeout(function () { map.relayout(); }, 1000);
     }
 
-    function onLatLngChange(latInput, lngInput, inputData) {
-        // 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
+    function changeLatLngData(latInput, lngInput, inputData) {
+        // changeLatLngData : 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
         let newInputData = { ...inputData };
-
         newInputData.userLat = latInput;
         newInputData.userLng = lngInput;
-
         setInputData(newInputData);
     }
 
     function onInputChange(target, inputData) {
-        // 위도, 경도를 제외한 사용자 데이터가 변경될 때마다 감지하여 inputData를 업데이트해주는 함수
+        // onInputChange : 위도, 경도를 제외한 사용자 데이터가 변경될 때마다 감지하여 inputData를 업데이트해주는 함수
         let newValue = target.value;
         let newInputData = { ...inputData };
 
@@ -111,10 +109,10 @@ function OpenMeetingPage(props) {
     }
 
     let onSubmitHandler = (e) => {
-        // 입력한 데이터를 post로 서버에 전송하는 함수
+        // sendMaster : 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
-        let body = {
+        let sendData = {
             "meet": {
                 "meet_name": inputData.meetingName,
                 "meet_pwd": inputData.meetingPwd,
@@ -129,7 +127,7 @@ function OpenMeetingPage(props) {
             }
         }
 
-        axios.post('/api/user/add_master', body).then(response => {
+        axios.post('/api/user/add_master', sendData).then(response => {
             if (response.data.success) {
                 // console.log(response.data);
                 alert("모임이 정상적으로 생성되었습니다!");
@@ -150,19 +148,18 @@ function OpenMeetingPage(props) {
                 <div className="user-input-area">
                     <div
                         className={
-                            userInputScreen === 0
+                            currentScreen === 0
                                 ? "user-input-title opened"
                                 : "user-input-title"
                         }
                         onClick={() => {
-                            setUserInputScreen(0);
+                            setCurrentScreen(0);
                         }}
                     >
-                        만들 모임 이름과 인원수를 선택해 주세요
+                        만들 모임 이름과 모임의 최대 인원수를 선택해 주세요
                     </div>
-                    {userInputScreen === 0 ? (
+                    {currentScreen === 0 ? (
                         <div className="user-input-content">
-
                             <div>
                                 <p>모임 이름</p>
                                 <input
@@ -172,7 +169,6 @@ function OpenMeetingPage(props) {
                                     onChange={(e) => { onInputChange(e.target, inputData) }}
                                 />
                             </div>
-
                             <div>
                                 <p>인원수</p>
                                 <p>
@@ -186,7 +182,7 @@ function OpenMeetingPage(props) {
                                 <button
                                     className="next-button"
                                     onClick={() => {
-                                        setUserInputScreen(1);
+                                        setCurrentScreen(1);
                                     }}
                                 >다음</button>
                             </div>
@@ -197,15 +193,15 @@ function OpenMeetingPage(props) {
                 <div className="user-input-area">
                     <div
                         className={
-                            userInputScreen === 1
+                            currentScreen === 1
                                 ? "user-input-title opened"
                                 : "user-input-title"
                         }
                         onClick={() => {
-                            setUserInputScreen(1);
+                            setCurrentScreen(1);
                         }}
                     >참여자 닉네임을 입력해 주세요</div>
-                    {userInputScreen === 1 ? (
+                    {currentScreen === 1 ? (
                         <div className="user-input-content">
                             <div>
                                 <p>닉네임</p>
@@ -220,13 +216,13 @@ function OpenMeetingPage(props) {
                                 <button
                                     className="prev-button"
                                     onClick={() => {
-                                        setUserInputScreen(0);
+                                        setCurrentScreen(0);
                                     }}
                                 >이전</button>
                                 <button
                                     className="next-button"
                                     onClick={() => {
-                                        setUserInputScreen(2);
+                                        setCurrentScreen(2);
                                     }}
                                 >다음</button>
                             </div>
@@ -237,15 +233,15 @@ function OpenMeetingPage(props) {
                 <div className="user-input-area">
                     <div
                         className={
-                            userInputScreen === 2
+                            currentScreen === 2
                                 ? "user-input-title opened"
                                 : "user-input-title"
                         }
                         onClick={() => {
-                            setUserInputScreen(2);
+                            setCurrentScreen(2);
                         }}
                     >출발할 위치를 선택해 주세요</div>
-                    {userInputScreen === 2 ? (
+                    {currentScreen === 2 ? (
                         <div className="user-input-content">
                             <div className="map-area">
                                 <div id="host-map" />
@@ -256,13 +252,13 @@ function OpenMeetingPage(props) {
                                 <button
                                     className="prev-button"
                                     onClick={() => {
-                                        setUserInputScreen(1);
+                                        setCurrentScreen(1);
                                     }}
                                 >이전</button>
                                 <button
                                     className="next-button"
                                     onClick={() => {
-                                        setUserInputScreen(3);
+                                        setCurrentScreen(3);
                                     }}
                                 >다음</button>
                             </div>
@@ -273,17 +269,17 @@ function OpenMeetingPage(props) {
                 <div className="user-input-area">
                     <div
                         className={
-                            userInputScreen === 3
+                            currentScreen === 3
                                 ? "user-input-title opened"
                                 : "user-input-title"
                         }
                         onClick={() => {
-                            setUserInputScreen(3);
+                            setCurrentScreen(3);
                         }}
                     >
                         모임에 참여할 때 사용할 비밀번호를 설정해 주세요
                     </div>
-                    {userInputScreen === 3 ? (
+                    {currentScreen === 3 ? (
                         <div className="user-input-content">
                             <div className="input-area-3">
                                 <p>
@@ -296,7 +292,7 @@ function OpenMeetingPage(props) {
                                 <button
                                     className="prev-button"
                                     onClick={() => {
-                                        setUserInputScreen(2);
+                                        setCurrentScreen(2);
                                     }}
                                 >이전</button>
                                 <button

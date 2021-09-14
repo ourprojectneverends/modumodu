@@ -58,9 +58,9 @@
 ### 2021.09.06
 - FE에서 BE로 데이터 보내는 기능 구현
   - [x] OpenMeetingPage 데이터 전송 기능
-  - [ ] JoinMeetingPage 데이터 전송 기능
-  - [ ] JoinMeetingPage 데이터 전송 기능 (암호)
-  - [ ] JoinMeetingPage 데이터 수신 기능
+  - [x] JoinMeetingPage 데이터 전송 기능
+  - [x] JoinMeetingPage 데이터 전송 기능 (암호)
+  - [x] JoinMeetingPage 데이터 수신 기능
   - [ ] MeetingInfoPage 데이터 수신 기능
 - [X] 방장(모임을 여는 사람)을 등록할 때, 하나의 요청을 받아서 모임과 방장을 함께 등록하도록 구현
 - [X] meet 스키마 수정
