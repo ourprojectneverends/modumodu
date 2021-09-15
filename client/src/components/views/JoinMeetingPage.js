@@ -19,58 +19,92 @@ function JoinMeetingPage(props) {
     });
 
     useEffect(() => {
+        getMyGps();
+    }, [])
+
+    useEffect(() => {
         if (userInputScreen == 1) {
             mapDrawer();
         }
     }, [userInputScreen])
 
+    function getMyGps() {
+        // gps로 현재 위치 받아오는 함수
+        let newLatLng = { ...inputData };
+
+        function getLatLng(position) {
+            newLatLng.userLat = position.coords.latitude;
+            newLatLng.userLng = position.coords.longitude;
+            setInputData(newLatLng);
+        }
+
+        function errorHandler(err) {
+            newLatLng.userLat = 36.366701;
+            newLatLng.userLng = 127.344307;
+            setInputData(newLatLng);
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        let gpsOptions = {
+            enableHighAccuracy: true,
+            timeout: 5000
+        };
+
+        navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
+    }
+
     function mapDrawer() {
         // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
-        var geocoder = new kakao.maps.services.Geocoder();
-        let mapContainer = document.getElementById('client-map');
-        let curLocationP = document.getElementById('client-location');
+        let geocoder;
+        let mapContainer;
+        let curLocationP;
+        let initialPosition;
+        let options;
+        let map;
+        let marker;
+        let printAddress;
 
-        // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
-        let curLatitude = 33.450701;
-        let curLongtitude = 126.570667;
-        let initialPosition = new kakao.maps.LatLng(curLatitude, curLongtitude);
+        geocoder = new kakao.maps.services.Geocoder();
+        mapContainer = document.getElementById('client-map');
+        curLocationP = document.getElementById('client-location');
 
-        let options = {
+        initialPosition = new kakao.maps.LatLng(inputData.userLat, inputData.userLng);
+
+        options = {
             // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
             center: initialPosition,
             level: 3
         };
-        let map = new kakao.maps.Map(mapContainer, options);
+
+        map = new kakao.maps.Map(mapContainer, options);
 
         // 중심 좌표에 마커 만들기
-        let marker = new kakao.maps.Marker({
+        marker = new kakao.maps.Marker({
             position: initialPosition
         });
         marker.setMap(map);
 
-        let printAddress = function (result, status) {
+        printAddress = function (result, status) {
             // 위도, 경도에 따라 지번 주소를 curLocationP에 출력해주는 콜백함수
             if (status === kakao.maps.services.Status.OK) {
                 curLocationP.innerHTML = result[0].address.address_name;
             }
         };
 
-        geocoder.coord2Address(curLongtitude, curLatitude, printAddress);
-        changeLatLngData(curLatitude, curLongtitude, inputData);
-
-        setTimeout(function () { map.relayout(); }, 1000);
+        geocoder.coord2Address(inputData.userLng, inputData.userLat, printAddress);
 
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
         kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
+
             geocoder.coord2Address(selectedLocation.getLng(), selectedLocation.getLat(), printAddress);
             changeLatLngData(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
         });
     }
 
     function changeLatLngData(latInput, lngInput, inputData) {
-        // changeLatLngData : 지도에서 위도, 경도가 바뀔 때 호출해서 inputData를 업데이트해주는 함수
+        // changeLatLngData : 지도에서 위도, 경도가 처음 설정되거나 바뀔 때 호출해서 inputData를 업데이트해주는 함수
         let newInputData = { ...inputData };
         newInputData.userLat = latInput;
         newInputData.userLng = lngInput;
