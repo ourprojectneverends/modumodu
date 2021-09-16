@@ -29,7 +29,7 @@ function JoinMeetingPage(props) {
     }, [userInputScreen])
 
     function getMyGps() {
-        // gps로 현재 위치 받아오는 함수
+        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수
         let newLatLng = { ...inputData };
 
         function getLatLng(position) {
@@ -55,36 +55,25 @@ function JoinMeetingPage(props) {
 
     function mapDrawer() {
         // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
-        let geocoder;
-        let mapContainer;
-        let curLocationP;
-        let initialPosition;
-        let options;
-        let map;
-        let marker;
-        let printAddress;
+        let geocoder = new kakao.maps.services.Geocoder();
+        let mapContainer = document.getElementById('client-map');
+        let curLocationP = document.getElementById('client-location');
 
-        geocoder = new kakao.maps.services.Geocoder();
-        mapContainer = document.getElementById('client-map');
-        curLocationP = document.getElementById('client-location');
-
-        initialPosition = new kakao.maps.LatLng(inputData.userLat, inputData.userLng);
-
-        options = {
+        let initialPosition = new kakao.maps.LatLng(inputData.userLat, inputData.userLng);
+        let options = {
             // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
             center: initialPosition,
             level: 3
         };
-
-        map = new kakao.maps.Map(mapContainer, options);
+        let map = new kakao.maps.Map(mapContainer, options);
 
         // 중심 좌표에 마커 만들기
-        marker = new kakao.maps.Marker({
+        let marker = new kakao.maps.Marker({
             position: initialPosition
         });
         marker.setMap(map);
 
-        printAddress = function (result, status) {
+        let printAddress = function (result, status) {
             // 위도, 경도에 따라 지번 주소를 curLocationP에 출력해주는 콜백함수
             if (status === kakao.maps.services.Status.OK) {
                 curLocationP.innerHTML = result[0].address.address_name;
@@ -252,6 +241,7 @@ function JoinMeetingPage(props) {
                         >출발할 위치를 선택해 주세요</div>
                         {userInputScreen === 1 ? (
                             <div className="user-input-content">
+                                <p>출발 위치</p>
                                 <div className="map-area">
                                     <div id="client-map" />
                                     <p id="client-location"></p>
