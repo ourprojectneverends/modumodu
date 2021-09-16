@@ -12,17 +12,8 @@ import { OpenMeetingPage } from "./components/views/OpenMeetingPage.js";
 import { JoinMeetingPage } from "./components/views/JoinMeetingPage.js";
 import { MeetingInfoPage } from "./components/views/MeetingInfoPage.js";
 import { GuidePage } from "./components/views/GuidePage.js";
-import LoginPage from "./components/views/LoginPage/LoginPage";
-
-// data
-import { MeetingData } from "./data/meeting_sample_data2.js";
-import { MemberData } from "./data/meeting_sample_data.js";
 
 function App() {
-  // state
-  let [meetingData, setMeetingData] = useState(MeetingData);
-  let [memberData, setMemberData] = useState(MemberData);
-
   return (
     <div className="App">
       <Navbar className="nav-bar">
@@ -58,18 +49,16 @@ function App() {
       </Navbar>
 
       <Switch>
-        <Route exact path="/login" component={LoginPage} />
-
         <Route path="/open_meeting">
-          <OpenMeetingPage memberData={memberData} meetingData={meetingData} />
+          <OpenMeetingPage />
         </Route>
 
         <Route path="/join_meeting">
-          <JoinMeetingPage memberData={memberData} meetingData={meetingData} />
+          <JoinMeetingPage />
         </Route>
 
         <Route path="/meeting_info">
-          <MeetingInfoPage memberData={memberData} meetingData={meetingData} />
+          <MeetingInfoPage />
         </Route>
 
         <Route path="/guide">
