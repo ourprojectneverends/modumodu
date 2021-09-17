@@ -12,6 +12,7 @@ import { ToastNotification } from "./ToastNotification.js";
 function JoinMeetingPage(props) {
     let [certified, setCertified] = useState(false);
     let [userInputScreen, setUserInputScreen] = useState(0);
+    let [toastState, setToastState] = useState(false);
 
     let [meetingId, setMeetingId] = useState("");
     let [meetingName, setMeetingName] = useState("");
@@ -150,9 +151,10 @@ function JoinMeetingPage(props) {
     }
 
     function checkInputValues() {
+        // checkInputValues : 입력하지 않은 input값이 있으면 해당 칸으로 이동시켜주고 toast알림을 통해 입력하지 않은 칸이 있다고 알리는 함수
         if (inputData.userName === "") {
             setUserInputScreen(0);
-            // toast 띄우기
+            setToastState(true);
             return false;
         }
 
@@ -163,11 +165,12 @@ function JoinMeetingPage(props) {
         // sendJoinData : 모임에 참여하려는 유저가 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
-        if (window.confirm("모임에 참여하시겠습니까?")) {
-            if (!checkInputValues()) {
-                return;
-            }
+        if (!checkInputValues()) {
+            // 먼저 input값을 체크해본다
+            return;
+        }
 
+        if (window.confirm("모임에 참여하시겠습니까?")) {
             let userData = {
                 "meet_id": meetingId,
                 "user": {
@@ -195,7 +198,12 @@ function JoinMeetingPage(props) {
 
     return (
         <div>
-            <ToastNotification />
+            {
+                toastState === true ? (
+                    <ToastNotification setToastState={setToastState} />
+                ) : null
+            }
+
             <p className="page-title">모임 참여하기</p>
             {certified === false ? (
                 <div className="page-door">

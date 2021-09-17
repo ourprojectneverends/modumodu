@@ -3,8 +3,14 @@ import React, { useState, useEffect } from "react";
 // css
 import "./Toast.css";
 
-function ToastNotification() {
+function ToastNotification(props) {
+    useEffect(() => {
+        let timer = setTimeout(() => {
+            props.setToastState(false);
+        }, 2000);
 
+        return () => { clearTimeout(timer) }
+    }, []);
 
     return (
         <div className="toast-alert">
