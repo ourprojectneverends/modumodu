@@ -63,6 +63,10 @@
   margin-top: 25px;
 }
 
+.user_input_tips{
+  color:grey;
+}
+
 .none {
   visibility: hidden;
 }
