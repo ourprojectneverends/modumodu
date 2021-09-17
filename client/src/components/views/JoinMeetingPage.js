@@ -3,7 +3,11 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 // css
+import "./Toast.css";
 import "./Meeting.css";
+
+// components
+import { ToastNotification } from "./ToastNotification.js";
 
 function JoinMeetingPage(props) {
     let [certified, setCertified] = useState(false);
@@ -29,7 +33,7 @@ function JoinMeetingPage(props) {
     }, [userInputScreen])
 
     function getMyGps() {
-        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수
+        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수 (처음 한번 실행)
         let newLatLng = { ...inputData };
 
         function getLatLng(position) {
@@ -112,34 +116,6 @@ function JoinMeetingPage(props) {
         setInputData(newInputData);
     }
 
-    function sendJoinData(e) {
-        // sendJoinData : 모임에 참여하려는 유저가 입력한 데이터를 post로 서버에 전송하는 함수
-        e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
-
-        let userData = {
-            "meet_id": meetingId,
-            "user": {
-                "name": inputData.userName,
-                "pos": {
-                    "lat": inputData.userLat,
-                    "long": inputData.userLng
-                }
-            }
-        }
-
-        axios.post('/api/user/add_user', userData).then(response => {
-            // console.log(response.data);
-            if (response.data.success) {
-                alert("모임에 정상적으로 참여했습니다!");
-                window.location.href = "/meeting_info?id=" + meetingId;
-            } else {
-                alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
-            }
-        }).catch((error) => {
-            console.log(error.response);
-        });
-    }
-
     function isVaildPassword(e) {
         // isVaildPassword : 모임에 참가하기 위해 비밀번호를 입력했을 때 처리해주는 함수
         e.preventDefault();     // 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
@@ -173,8 +149,53 @@ function JoinMeetingPage(props) {
         });
     }
 
+    function checkInputValues() {
+        if (inputData.userName === "") {
+            setUserInputScreen(0);
+            // toast 띄우기
+            return false;
+        }
+
+        return true;
+    }
+
+    function sendJoinData(e) {
+        // sendJoinData : 모임에 참여하려는 유저가 입력한 데이터를 post로 서버에 전송하는 함수
+        e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
+
+        if (window.confirm("모임에 참여하시겠습니까?")) {
+            if (!checkInputValues()) {
+                return;
+            }
+
+            let userData = {
+                "meet_id": meetingId,
+                "user": {
+                    "name": inputData.userName,
+                    "pos": {
+                        "lat": inputData.userLat,
+                        "long": inputData.userLng
+                    }
+                }
+            }
+
+            // axios.post('/api/user/add_user', userData).then(response => {
+            //     // console.log(response.data);
+            //     if (response.data.success) {
+            //         alert("모임에 정상적으로 참여했습니다!");
+            //         window.location.href = "/meeting_info?id=" + meetingId;
+            //     } else {
+            //         alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+            //     }
+            // }).catch((error) => {
+            //     console.log(error.response);
+            // });
+        }
+    }
+
     return (
         <div>
+            <ToastNotification />
             <p className="page-title">모임 참여하기</p>
             {certified === false ? (
                 <div className="page-door">
