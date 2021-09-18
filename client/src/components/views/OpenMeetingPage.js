@@ -5,8 +5,13 @@ import axios from 'axios';
 // css
 import "./Meeting.css";
 
+// components
+import { ToastNotification } from "./ToastNotification.js";
+
 function OpenMeetingPage() {
     let [currentScreen, setCurrentScreen] = useState(0);
+    let [toastState, setToastState] = useState(false);
+    let [toastAnimation, setToastAnimation] = useState("toast-alert");
     let [inputData, setInputData] = useState({
         meetingName: "",
         meetingPwd: "",
@@ -17,69 +22,77 @@ function OpenMeetingPage() {
     });
 
     useEffect(() => {
-        if (currentScreen == 2) {
+        getMyGps();
+    }, [])
+
+    useEffect(() => {
+        if (currentScreen === 2) {
             mapDrawer();
         }
     }, [currentScreen])
 
+    function getMyGps() {
+        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수 (처음 한번 실행)
+        let newLatLng = { ...inputData };
+
+        function getLatLng(position) {
+            newLatLng.userLat = position.coords.latitude;
+            newLatLng.userLng = position.coords.longitude;
+            setInputData(newLatLng);
+        }
+
+        function errorHandler(err) {
+            newLatLng.userLat = 36.366701;
+            newLatLng.userLng = 127.344307;
+            setInputData(newLatLng);
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        let gpsOptions = {
+            enableHighAccuracy: true,
+            timeout: 5000
+        };
+
+        navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
+    }
+
     function mapDrawer() {
         // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
+        let geocoder = new kakao.maps.services.Geocoder();
         let mapContainer = document.getElementById('host-map');
         let curLocationP = document.getElementById('host-location');
 
-        let curLatitude = 33.450701;   // 현재 위도와 경도를 저장할 변수, 기본값은 카카오 본사
-        let curLongtitude = 126.570667;
-
-        // gps로 현재 위치 받아오는 부분 START
-        // navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
-        // console.log("겟포지션 수행 완 " + curLatitude + "/" + curLongtitude);
-
-        // function getLatLng(position) {
-        //     // 위도와 경도 저장하기
-        //     curLatitude = position.coords.latitude;
-        //     curLongtitude = position.coords.longitude;
-        //     console.log("내위치추적 완 " + curLatitude + "/" + curLongtitude);
-        // }
-
-        // function errorHandler(err) {
-        //     console.warn(`ERROR(${err.code}): ${err.message}`);
-        // }
-
-        // let gpsOptions = {
-        //     enableHighAccuracy: true,
-        //     timeout: 5000
-        // };
-        // gps로 현재 위치 받아오는 부분 END
-
-        let initialPosition = new window.kakao.maps.LatLng(curLatitude, curLongtitude);
-
+        let initialPosition = new kakao.maps.LatLng(inputData.userLat, inputData.userLng);
         let options = {
             // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
             center: initialPosition,
             level: 3
         };
-        let map = new window.kakao.maps.Map(mapContainer, options);
+        let map = new kakao.maps.Map(mapContainer, options);
 
         // 중심 좌표에 마커 만들기
-        let marker = new window.kakao.maps.Marker({
+        let marker = new kakao.maps.Marker({
             position: initialPosition
         });
         marker.setMap(map);
 
-        let message = '선택한 위치의 위도 : ' + curLatitude + ', 경도 : ' + curLongtitude;
-        curLocationP.innerHTML = message;
-        changeLatLngData(curLatitude, curLongtitude, inputData);
+        let printAddress = function (result, status) {
+            // 위도, 경도에 따라 지번 주소를 curLocationP에 출력해주는 콜백함수
+            if (status === kakao.maps.services.Status.OK) {
+                curLocationP.innerHTML = result[0].address.address_name;
+            }
+        };
+
+        geocoder.coord2Address(inputData.userLng, inputData.userLat, printAddress);
 
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
-        window.kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
-            let newMessage = '선택한 위치의 위도 : ' + selectedLocation.getLat() + ', 경도 : ' + selectedLocation.getLng();
-            curLocationP.innerHTML = newMessage;
+
+            geocoder.coord2Address(selectedLocation.getLng(), selectedLocation.getLat(), printAddress);
             changeLatLngData(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
         });
-
-        setTimeout(function () { map.relayout(); }, 1000);
     }
 
     function changeLatLngData(latInput, lngInput, inputData) {
@@ -108,42 +121,76 @@ function OpenMeetingPage() {
         setInputData(newInputData);
     }
 
+    function checkInputValues() {
+        // checkInputValues : 입력하지 않은 input값이 있으면 해당 칸으로 이동시켜주고 toast알림을 통해 입력하지 않은 칸이 있다고 알리는 함수
+        if (inputData.meetingName === "" || inputData.limitOfMeeting === "") {
+            setCurrentScreen(0);
+            setToastState(true);
+            setToastAnimation("toast-alert openAnimation")
+            return false;
+        } else if (inputData.userName === "") {
+            setCurrentScreen(1);
+            setToastState(true);
+            setToastAnimation("toast-alert openAnimation")
+            return false;
+        } else if (inputData.meetingPwd === "") {
+            setCurrentScreen(3);
+            setToastState(true);
+            setToastAnimation("toast-alert openAnimation")
+            return false;
+        }
+
+        return true;
+    }
+
     let onSubmitHandler = (e) => {
         // sendMaster : 입력한 데이터를 post로 서버에 전송하는 함수
         e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
 
-        let sendData = {
-            "meet": {
-                "meet_name": inputData.meetingName,
-                "meet_pwd": inputData.meetingPwd,
-                "limit": inputData.limitOfMeeting
-            },
-            "user": {
-                "name": inputData.userName,
-                "pos": {
-                    "lat": inputData.userLat,
-                    "long": inputData.userLng
-                }
-            }
+        if (!checkInputValues()) {
+            // 먼저 input값을 체크해본다
+            return;
         }
 
-        axios.post('/api/user/add_master', sendData).then(response => {
-            if (response.data.success) {
-                // console.log(response.data);
-                alert("모임이 정상적으로 생성되었습니다!");
-                window.location.href = "/meeting_info?id=" + response.data.created_meet_id;
-            } else {
-                alert("모임 생성에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+        if (window.confirm("모임에 참여하시겠습니까?")) {
+            let sendData = {
+                "meet": {
+                    "meet_name": inputData.meetingName,
+                    "meet_pwd": inputData.meetingPwd,
+                    "limit": inputData.limitOfMeeting
+                },
+                "user": {
+                    "name": inputData.userName,
+                    "pos": {
+                        "lat": inputData.userLat,
+                        "long": inputData.userLng
+                    }
+                }
             }
-        }).catch((error) => {
-            console.log(error.response);
-        });
+
+            axios.post('/api/user/add_master', sendData).then(response => {
+                if (response.data.success) {
+                    // console.log(response.data);
+                    alert("모임이 정상적으로 생성되었습니다!");
+                    window.location.href = "/meeting_info?id=" + response.data.created_meet_id;
+                } else {
+                    alert("모임 생성에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+                }
+            }).catch((error) => {
+                console.log(error.response);
+            });
+        }
     };
 
     return (
         <div>
-            <p className="page-title">새 모임 만들기</p>
+            {
+                toastState === true ? (
+                    <ToastNotification setToastState={setToastState} toastAnimation={toastAnimation} setToastAnimation={setToastAnimation} />
+                ) : null
+            }
 
+            <p className="page-title">새 모임 만들기</p>
             <form className="page-content" onSubmit={onSubmitHandler}>
                 <div className="user-input-area">
                     <div
@@ -167,14 +214,15 @@ function OpenMeetingPage() {
                                     placeholder="모임 이름"
                                     id="meeting-name"
                                     onChange={(e) => { onInputChange(e.target, inputData) }}
+                                    value={inputData.meetingName}
                                 />
                             </div>
                             <div>
                                 <p>인원수</p>
                                 <p>
-                                    최대 <input type="number" min="2" max="6" id="limit-of-meeting" onChange={(e) => { onInputChange(e.target, inputData) }} />명까지
+                                    최대 <input type="number" min="2" max="6" id="limit-of-meeting" onChange={(e) => { onInputChange(e.target, inputData) }} value={inputData.limitOfMeeting} />명까지
                                 </p>
-                                <p>* 모임 인원은 2~6명까지 선택 가능합니다.</p>
+                                <p className="user_input_tips">* 모임 인원은 2~6명까지 선택 가능합니다.</p>
                             </div>
 
                             <div className="user-input-buttons">
@@ -208,7 +256,7 @@ function OpenMeetingPage() {
                                 <input
                                     type="text"
                                     placeholder="닉네임"
-                                    id="user-name" onChange={(e) => { onInputChange(e.target, inputData) }}
+                                    id="user-name" onChange={(e) => { onInputChange(e.target, inputData) }} value={inputData.userName}
                                 />
                             </div>
 
@@ -244,6 +292,7 @@ function OpenMeetingPage() {
                     {currentScreen === 2 ? (
                         <div className="user-input-content">
                             <div className="map-area">
+                                <p>출발 위치</p>
                                 <div id="host-map" />
                                 <p id="host-location"></p>
                             </div>
@@ -281,11 +330,10 @@ function OpenMeetingPage() {
                     </div>
                     {currentScreen === 3 ? (
                         <div className="user-input-content">
-                            <div className="input-area-3">
-                                <p>
-                                    비밀번호 <input type="password" id="meeting-pwd" onChange={(e) => { onInputChange(e.target, inputData) }} />
-                                </p>
-                                <p>* 모임에 참여할 때 사용되는 비밀번호로, 초대 시 공유되므로 사적인 비밀번호를 사용하지 마세요!</p>
+                            <div>
+                                <p>비밀번호</p>
+                                <input type="password" id="meeting-pwd" onChange={(e) => { onInputChange(e.target, inputData) }} value={inputData.meetingPwd} />
+                                <p className="user_input_tips">* 모임에 참여할 때 사용되는 비밀번호로, 초대 시 공유되므로 사적인 비밀번호를 사용하지 마세요!</p>
                             </div>
 
                             <div className="user-input-buttons">
