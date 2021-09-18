@@ -13,7 +13,7 @@ function JoinMeetingPage(props) {
     let [certified, setCertified] = useState(false);
     let [userInputScreen, setUserInputScreen] = useState(0);
     let [toastState, setToastState] = useState(false);
-
+    let [toastAnimation, setToastAnimation] = useState("toast-alert");
     let [meetingId, setMeetingId] = useState("");
     let [meetingName, setMeetingName] = useState("");
     let [numberOfPeopleState, setNumberOfPeopleState] = useState("");
@@ -28,7 +28,7 @@ function JoinMeetingPage(props) {
     }, [])
 
     useEffect(() => {
-        if (userInputScreen == 1) {
+        if (userInputScreen === 1) {
             mapDrawer();
         }
     }, [userInputScreen])
@@ -155,6 +155,7 @@ function JoinMeetingPage(props) {
         if (inputData.userName === "") {
             setUserInputScreen(0);
             setToastState(true);
+            setToastAnimation("toast-alert openAnimation")
             return false;
         }
 
@@ -182,17 +183,17 @@ function JoinMeetingPage(props) {
                 }
             }
 
-            // axios.post('/api/user/add_user', userData).then(response => {
-            //     // console.log(response.data);
-            //     if (response.data.success) {
-            //         alert("모임에 정상적으로 참여했습니다!");
-            //         window.location.href = "/meeting_info?id=" + meetingId;
-            //     } else {
-            //         alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
-            //     }
-            // }).catch((error) => {
-            //     console.log(error.response);
-            // });
+            axios.post('/api/user/add_user', userData).then(response => {
+                // console.log(response.data);
+                if (response.data.success) {
+                    alert("모임에 정상적으로 참여했습니다!");
+                    window.location.href = "/meeting_info?id=" + meetingId;
+                } else {
+                    alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+                }
+            }).catch((error) => {
+                console.log(error.response);
+            });
         }
     }
 
@@ -200,7 +201,7 @@ function JoinMeetingPage(props) {
         <div>
             {
                 toastState === true ? (
-                    <ToastNotification setToastState={setToastState} />
+                    <ToastNotification setToastState={setToastState} toastAnimation={toastAnimation} setToastAnimation={setToastAnimation} />
                 ) : null
             }
 

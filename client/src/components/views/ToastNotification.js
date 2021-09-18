@@ -5,15 +5,28 @@ import "./Toast.css";
 
 function ToastNotification(props) {
     useEffect(() => {
-        let timer = setTimeout(() => {
-            props.setToastState(false);
-        }, 2000);
+        props.setToastAnimation("toast-alert openAnimation");
 
-        return () => { clearTimeout(timer) }
+        let timer2;
+        let timer = setTimeout(() => {
+            props.setToastAnimation("toast-alert closeAnimation");
+            timer2 = setTimeout(() => {
+                props.setToastState(false);
+            }, 500);
+        }, 3000);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+        }
     }, []);
 
+    function toastClickEvent() {
+        props.setToastState(false);
+    }
+
     return (
-        <div className="toast-alert">
+        <div className={props.toastAnimation} onClick={() => { toastClickEvent() }}>
             <img alt="" src="img/alert.png" />
             <p>입력하지 않은 칸이 있습니다!</p>
         </div>
