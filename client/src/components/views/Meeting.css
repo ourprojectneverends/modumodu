@@ -63,8 +63,13 @@
   margin-top: 25px;
 }
 
-.user_input_tips{
-  color:grey;
+.user_input_tips {
+  background-color: rgba(128, 128, 128, 0.212);
+  border-radius: 5px;
+  padding: 5px;
+  color: rgb(94, 94, 94);
+  font-size: 1.3rem;
+  font-weight: bold;
 }
 
 .none {
