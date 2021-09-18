@@ -3,13 +3,12 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 // css
-import "./Toast.css";
 import "./Meeting.css";
 
 // components
 import { ToastNotification } from "./ToastNotification.js";
 
-function JoinMeetingPage(props) {
+function JoinMeetingPage() {
     let [certified, setCertified] = useState(false);
     let [userInputScreen, setUserInputScreen] = useState(0);
     let [toastState, setToastState] = useState(false);
@@ -241,9 +240,13 @@ function JoinMeetingPage(props) {
                             <div className="user-input-content">
                                 <div>
                                     <p>닉네임</p>
-                                    <input type="text"
+                                    <input
+                                        type="text"
                                         placeholder="닉네임"
-                                        id="user-name" onChange={(e) => { onInputChange(e.target, inputData) }} value={inputData.userName} />
+                                        id="user-name"
+                                        onChange={(e) => { onInputChange(e.target, inputData) }}
+                                        value={inputData.userName}
+                                    />
                                 </div>
 
                                 <div className="user-input-buttons">
