@@ -5,10 +5,14 @@ import axios from 'axios';
 // css
 import "./Meeting.css";
 
-function JoinMeetingPage(props) {
+// components
+import { ToastNotification } from "./ToastNotification.js";
+
+function JoinMeetingPage() {
     let [certified, setCertified] = useState(false);
     let [userInputScreen, setUserInputScreen] = useState(0);
-
+    let [toastState, setToastState] = useState(false);
+    let [toastAnimation, setToastAnimation] = useState("toast-alert");
     let [meetingId, setMeetingId] = useState("");
     let [meetingName, setMeetingName] = useState("");
     let [numberOfPeopleState, setNumberOfPeopleState] = useState("");
@@ -23,13 +27,13 @@ function JoinMeetingPage(props) {
     }, [])
 
     useEffect(() => {
-        if (userInputScreen == 1) {
+        if (userInputScreen === 1) {
             mapDrawer();
         }
     }, [userInputScreen])
 
     function getMyGps() {
-        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수
+        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수 (처음 한번 실행)
         let newLatLng = { ...inputData };
 
         function getLatLng(position) {
@@ -112,34 +116,6 @@ function JoinMeetingPage(props) {
         setInputData(newInputData);
     }
 
-    function sendJoinData(e) {
-        // sendJoinData : 모임에 참여하려는 유저가 입력한 데이터를 post로 서버에 전송하는 함수
-        e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
-
-        let userData = {
-            "meet_id": meetingId,
-            "user": {
-                "name": inputData.userName,
-                "pos": {
-                    "lat": inputData.userLat,
-                    "long": inputData.userLng
-                }
-            }
-        }
-
-        axios.post('/api/user/add_user', userData).then(response => {
-            // console.log(response.data);
-            if (response.data.success) {
-                alert("모임에 정상적으로 참여했습니다!");
-                window.location.href = "/meeting_info?id=" + meetingId;
-            } else {
-                alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
-            }
-        }).catch((error) => {
-            console.log(error.response);
-        });
-    }
-
     function isVaildPassword(e) {
         // isVaildPassword : 모임에 참가하기 위해 비밀번호를 입력했을 때 처리해주는 함수
         e.preventDefault();     // 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
@@ -173,8 +149,61 @@ function JoinMeetingPage(props) {
         });
     }
 
+    function checkInputValues() {
+        // checkInputValues : 입력하지 않은 input값이 있으면 해당 칸으로 이동시켜주고 toast알림을 통해 입력하지 않은 칸이 있다고 알리는 함수
+        if (inputData.userName === "") {
+            setUserInputScreen(0);
+            setToastState(true);
+            setToastAnimation("toast-alert openAnimation")
+            return false;
+        }
+
+        return true;
+    }
+
+    function sendJoinData(e) {
+        // sendJoinData : 모임에 참여하려는 유저가 입력한 데이터를 post로 서버에 전송하는 함수
+        e.preventDefault();     //submit 버튼이 눌렸을 때 뷰가 새로고침 되는 것을 방지
+
+        if (!checkInputValues()) {
+            // 먼저 input값을 체크해본다
+            return;
+        }
+
+        if (window.confirm("모임에 참여하시겠습니까?")) {
+            let userData = {
+                "meet_id": meetingId,
+                "user": {
+                    "name": inputData.userName,
+                    "pos": {
+                        "lat": inputData.userLat,
+                        "long": inputData.userLng
+                    }
+                }
+            }
+
+            axios.post('/api/user/add_user', userData).then(response => {
+                // console.log(response.data);
+                if (response.data.success) {
+                    alert("모임에 정상적으로 참여했습니다!");
+                    window.location.href = "/meeting_info?id=" + meetingId;
+                } else {
+                    alert("모임 참여에 실패했습니다. 새로고침 후 다시 시도해 주세요.");
+                }
+            }).catch((error) => {
+                console.log(error.response);
+            });
+        }
+    }
+
     return (
         <div>
+            {
+                toastState === true ? (
+                    <ToastNotification setToastState={setToastState} toastAnimation={toastAnimation} setToastAnimation={setToastAnimation} />
+                ) : null
+            }
+
             <p className="page-title">모임 참여하기</p>
             {certified === false ? (
                 <div className="page-door">
@@ -211,9 +240,13 @@ function JoinMeetingPage(props) {
                             <div className="user-input-content">
                                 <div>
                                     <p>닉네임</p>
-                                    <input type="text"
+                                    <input
+                                        type="text"
                                         placeholder="닉네임"
-                                        id="user-name" onChange={(e) => { onInputChange(e.target, inputData) }} value={inputData.userName} />
+                                        id="user-name"
+                                        onChange={(e) => { onInputChange(e.target, inputData) }}
+                                        value={inputData.userName}
+                                    />
                                 </div>
 
                                 <div className="user-input-buttons">
