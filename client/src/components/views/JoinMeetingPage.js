@@ -1,6 +1,6 @@
 /* global kakao */
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 // css
 import "./Meeting.css";
@@ -60,8 +60,8 @@ function JoinMeetingPage() {
     function mapDrawer() {
         // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
         let geocoder = new kakao.maps.services.Geocoder();
-        let mapContainer = document.getElementById('client-map');
-        let curLocationP = document.getElementById('client-location');
+        let mapContainer = document.getElementById("client-map");
+        let curLocationP = document.getElementById("client-location");
 
         let initialPosition = new kakao.maps.LatLng(inputData.userLat, inputData.userLng);
         let options = {
@@ -87,7 +87,7 @@ function JoinMeetingPage() {
         geocoder.coord2Address(inputData.userLng, inputData.userLat, printAddress);
 
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
-        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
 
@@ -182,7 +182,7 @@ function JoinMeetingPage() {
                 }
             }
 
-            axios.post('/api/user/add_user', userData).then(response => {
+            axios.post("/api/user/add_user", userData).then(response => {
                 // console.log(response.data);
                 if (response.data.success) {
                     alert("모임에 정상적으로 참여했습니다!");

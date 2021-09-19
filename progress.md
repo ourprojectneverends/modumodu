@@ -61,7 +61,7 @@
   - [x] JoinMeetingPage 데이터 전송 기능
   - [x] JoinMeetingPage 데이터 전송 기능 (암호)
   - [x] JoinMeetingPage 데이터 수신 기능
-  - [ ] MeetingInfoPage 데이터 수신 기능
+  - [x] MeetingInfoPage 데이터 수신 기능
 - [X] 방장(모임을 여는 사람)을 등록할 때, 하나의 요청을 받아서 모임과 방장을 함께 등록하도록 구현
 - [X] meet 스키마 수정
 
@@ -77,6 +77,10 @@
 
 ### 2021.09.13
 - [X] 새로운 user가 join할 때 뷰에 필요한 정보들을 반환하도록 수정 
+
+### 2021.09.19
+- [ ] 중간 지점 찾기 알고리즘 구상
+- [ ] MeetingInfoPage 데이터 수신 기능, 데이터 보내주는거 구현되면 테스트해보기
 
 ---------
 
