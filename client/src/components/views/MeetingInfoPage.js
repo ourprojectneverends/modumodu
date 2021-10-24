@@ -26,6 +26,7 @@ function MeetingInfoPage(props) {
         userLat: "36.364262",
         userLng: "127.346424"
     }]);
+    const copyLinkRef = useRef();
 
     useEffect(() => {
         loadMeetingData();
@@ -115,6 +116,21 @@ function MeetingInfoPage(props) {
         map.setBounds(bounds);
     }
 
+    function copyTextUrl() {
+        // Browser compatibility 알림
+        if (!document.queryCommandSupported("copy")) {
+            alert("No Support");
+            return;
+        }
+
+        // 선택 후 복사
+        copyLinkRef.current.focus();
+        copyLinkRef.current.select();
+        document.execCommand('copy');
+
+        // 복사 완료 알림
+        alert("링크를 복사했습니다.");
+    }
     return (
         <div>
             <p className="page-title">우리 여기서 모이면 돼!</p>
@@ -147,8 +163,8 @@ function MeetingInfoPage(props) {
                 <div className="meeting-info-share-area">
                     <p>초대하기</p>
                     <div>
-                        <input type="text" value={"http://localhost:3000/join_meeting?id=" + meetingInfo.meetingId} />
-                        <button>복사</button>
+                        <input type="text" ref={copyLinkRef} value={"http://localhost:3000/join_meeting?id=" + meetingInfo.meetingId} />
+                        <button  onClick={()=>{copyTextUrl()}}>복사</button>
                     </div>
                     <button>카카오톡 공유하기</button>
                 </div>
