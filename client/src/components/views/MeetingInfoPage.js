@@ -120,7 +120,7 @@ function MeetingInfoPage(props) {
         copyLinkRef.current.focus();
         copyLinkRef.current.select();
 
-        navigator.clipboard.writeText(copyLinkRef.current.value).then(() => {
+        navigator.clipboard.writeText(copyLinkRef.current.defaultValue).then(() => {
             alert("링크를 복사했습니다.");
         });
     }
@@ -157,7 +157,7 @@ function MeetingInfoPage(props) {
                 <div className="meeting-info-share-area">
                     <p>초대하기</p>
                     <div>
-                        <input type="text" ref={copyLinkRef} value={"http://localhost:3000/join_meeting?id=" + meetingInfo.meetingId} />
+                        <input type="text" ref={copyLinkRef} defaultValue={"http://localhost:3000/join_meeting?id=" + meetingInfo.meetingId} />
                         <button onClick={() => { copyTextUrl() }}>복사</button>
                     </div>
                     <button>카카오톡 공유하기</button>
