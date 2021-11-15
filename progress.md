@@ -89,7 +89,7 @@
 - [x] [**MeetingInfoPage**] 초대 링크 복사 기능 구현하기 (useRef()이용)
 
 ### 2021.10.24
-- [ ] [**OpenMeetingPage, JoinMeetingPage**] async, await 이용해서 현재 위치 받아오는 부분 동기적으로 구현 시도해보기
+- [X] [**OpenMeetingPage, JoinMeetingPage**] async, await 이용해서 현재 위치 받아오는 부분 동기적으로 구현 시도해보기
 
 ### 2021.11.07
 - [ ] 임시 중간 지점 찾는 알고리즘(그냥 모든 좌표의 중간점으로) BE에 구현해두기

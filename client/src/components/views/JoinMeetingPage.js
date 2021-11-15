@@ -23,47 +23,32 @@ function JoinMeetingPage() {
     });
 
     useEffect(() => {
-        getMyGps();
-    }, [])
-
-    useEffect(() => {
         if (userInputScreen === 1) {
             mapDrawer();
         }
     }, [userInputScreen])
 
     function getMyGps() {
-        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수 (처음 한번 실행)
-        let newLatLng = { ...inputData };
-
-        function getLatLng(position) {
-            newLatLng.userLat = position.coords.latitude;
-            newLatLng.userLng = position.coords.longitude;
-            setInputData(newLatLng);
-        }
-
-        function errorHandler(err) {
-            newLatLng.userLat = 36.366701;
-            newLatLng.userLng = 127.344307;
-            setInputData(newLatLng);
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
+        // getMyGps : gps로 사용자의 현재 위치 받아오는 함수, Promise를 리턴하는 방식
 
         let gpsOptions = {
             enableHighAccuracy: true,
             timeout: 5000
         };
 
-        navigator.geolocation.getCurrentPosition(getLatLng, errorHandler, gpsOptions);
+        return new Promise((resolve, rejected) => {
+            navigator.geolocation.getCurrentPosition(resolve, rejected);
+        });
     }
 
-    function mapDrawer() {
-        // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
-        let geocoder = new kakao.maps.services.Geocoder();
-        let mapContainer = document.getElementById("client-map");
-        let curLocationP = document.getElementById("client-location");
+    function setKakaoMapWithNewLatLng(newLatLng) {
+        // setKakaoMapWithNewLatLng : newLatLng으로 새로운 위도/경도값이 들어오면 카카오맵을 설정해주는 함수
 
-        let initialPosition = new kakao.maps.LatLng(inputData.userLat, inputData.userLng);
+        let geocoder = new kakao.maps.services.Geocoder();
+        let mapContainer = document.getElementById('client-map');
+        let curLocationP = document.getElementById('client-location');
+
+        let initialPosition = new kakao.maps.LatLng(newLatLng.userLat, newLatLng.userLng);
         let options = {
             // 지도 생성시 필요한 기본옵션 (중심좌표, 확대축소정도)
             center: initialPosition,
@@ -84,16 +69,39 @@ function JoinMeetingPage() {
             }
         };
 
-        geocoder.coord2Address(inputData.userLng, inputData.userLat, printAddress);
+        geocoder.coord2Address(newLatLng.userLng, newLatLng.userLat, printAddress);
 
         // [지도 클릭 Event] 해당 포인트로 마커를 옮김
-        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
             let selectedLocation = mouseEvent.latLng;
             marker.setPosition(selectedLocation);
 
             geocoder.coord2Address(selectedLocation.getLng(), selectedLocation.getLat(), printAddress);
             changeLatLngData(selectedLocation.getLat(), selectedLocation.getLng(), inputData);
         });
+
+        setInputData(newLatLng);
+    }
+
+    async function mapDrawer() {
+        // mapDrawer : 지도가 있는 창이 열렸을 때, 지도 div에 카카오맵 지도를 그려 주는 함수
+        let newLatLng = { ...inputData };
+
+        try {
+            let position = await getMyGps();
+
+            newLatLng.userLat = position.coords.latitude;
+            newLatLng.userLng = position.coords.longitude;
+
+            setKakaoMapWithNewLatLng(newLatLng);
+        } catch (err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+
+            newLatLng.userLat = 36.366701;
+            newLatLng.userLng = 127.344307;
+
+            setKakaoMapWithNewLatLng(newLatLng);
+        }
     }
 
     function changeLatLngData(latInput, lngInput, inputData) {
