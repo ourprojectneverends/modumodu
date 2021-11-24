@@ -79,7 +79,7 @@
 - [X] 새로운 user가 join할 때 뷰에 필요한 정보들을 반환하도록 수정 
 
 ### 2021.09.19
-- [ ] 중간 지점 찾기 알고리즘 구상
+- [X] 중간 지점 찾기 알고리즘 구상 --> 결과 구현 후 알고리즘 수정하기로 하고, 일단은 중간점 구하는 공식으로 중간 지점을 설정할 수 있도록 할것
 - [ ] MeetingInfoPage 데이터 수신 기능, 데이터 보내주는거 구현되면 테스트해보기
 
 ### 2021.09.23
@@ -89,7 +89,10 @@
 - [x] [**MeetingInfoPage**] 초대 링크 복사 기능 구현하기 (useRef()이용)
 
 ### 2021.10.24
-- [ ] [**OpenMeetingPage, JoinMeetingPage**] async, await 이용해서 현재 위치 받아오는 부분 동기적으로 구현 시도해보기
+- [X] [**OpenMeetingPage, JoinMeetingPage**] async, await 이용해서 현재 위치 받아오는 부분 동기적으로 구현 시도해보기
+
+### 2021.11.07
+- [ ] 임시 중간 지점 찾는 알고리즘(그냥 모든 좌표의 중간점으로) BE에 구현해두기
 
 ---------
 
@@ -97,7 +100,7 @@
 
 |PAGE|index|guide_page|
 |---|---|---|
-|WORK|[title-area] 문구 수정, 텍스트 크기 화면에 맞게 수정 / [detail-area] 앱의 특징 추가|구현 완료 후 사용방법 추가|
+|WORK|[title-area] 문구 수정, 텍스트 크기 화면에 맞게 수정, 타입스크립트 적용, 테스트 코드 적용 / [detail-area] 앱의 특징 추가|구현 완료 후 사용방법 추가|
 
 |PAGE|open_meeting|join_meeting|meeting_info|
 |---|---|---|---|
